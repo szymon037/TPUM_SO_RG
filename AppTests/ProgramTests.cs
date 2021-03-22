@@ -1,22 +1,22 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TPUM.iOS;
+using App;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TPUM.iOS.Tests
+namespace App.Tests
 {
     [TestClass()]
-    public class ApplicationTests
+    public class ProgramTests
     {
         [TestMethod()]
         public void GreaterThanZeroTest()
         {
-            Assert.IsTrue(Application.GreaterThanZero(1));
-            Assert.IsFalse(Application.GreaterThanZero(0));
-            Assert.IsFalse(Application.GreaterThanZero(-1));
+            Assert.IsTrue(Program.GreaterThanZero(1));
+            Assert.IsFalse(Program.GreaterThanZero(0));
+            Assert.IsFalse(Program.GreaterThanZero(-1));
         }
     }
 }
