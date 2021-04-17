@@ -32,5 +32,16 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button Content="Add User" Command="{Binding AddUserCommand}" CommandParameter="{Binding NewUser}" HorizontalAlignment="Left" Margin="76,354,0,0" VerticalAlignment="Top"/>
+        <Button Content="Add Book" Command="{Binding AddBookCommand}" CommandParameter="{Binding NewBook}" HorizontalAlignment="Left" Margin="460,354,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="35,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="pl-pl" Text="Name"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="20,328,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Surname"/>
+        <TextBox Name ="UserName" HorizontalAlignment="Left" Margin="76,298,0,0" Text="{Binding NewUser.Name}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name ="UserSurname" HorizontalAlignment="Left" Margin="76,326,0,0" Text="{Binding NewUser.Surname}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="400,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Author"/>
+        <TextBlock HorizontalAlignment="Left" Margin="414,328,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Title"/>
+        <TextBox Name ="BookAuthor" HorizontalAlignment="Left" Margin="460,298,0,0" Text="{Binding NewBook.Author}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name ="BookTitle" HorizontalAlignment="Left" Margin="460,326,0,0" Text="{Binding NewBook.Title}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

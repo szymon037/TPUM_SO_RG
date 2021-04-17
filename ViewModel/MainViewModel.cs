@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 using Model.Repository;
 using Model.Data;
+using ViewModel.Commands;
 
 namespace ViewModel
 {
@@ -12,11 +13,33 @@ namespace ViewModel
     {
         public MainViewModel()
         {
+            NewUser = new User();
+            NewBook = new Book();
             SelectedBook = null;
             SelectedUser = null;
             ResultText = "Test";
+            Database = new Database();
+            //FetchDataCommand = new RelayCommand(Database = new Database());
+            AddUserCommand = new AddUserCommand(AddUser);//new RelayCommand(() => Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = UserNameText, Surname = UserSurnameNameText, Address = "AAA" }));
+            AddBookCommand = new AddBookCommand(AddBook);//new RelayCommand(() => Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = UserNameText, Surname = UserSurnameNameText, Address = "AAA" }));
+        }
 
-            FetchDataCommand = new RelayCommand(() => Database = new Database());
+        public void AddUser(User user)
+        {
+            if (user.Name == null || user.Surname == null)
+                return;
+
+            Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = user.Name, Surname = user.Surname, Address = user.Address });
+            NewUser = new User();
+        }
+
+        public void AddBook(Book book)
+        {
+            if (book.Title == null || book.Author == null)
+                return;
+
+            Books.Add(new Book { ID = Guid.NewGuid().ToString(), Title = book.Title, Author = book.Author });
+            NewBook = new Book();
         }
 
         public ObservableCollection<User> Users
@@ -76,7 +99,37 @@ namespace ViewModel
             }
         }
 
+        public User NewUser
+        {
+            get => _NewUser;
+            set
+            {
+                _NewUser = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Book NewBook
+        {
+            get => _NewBook;
+            set
+            {
+                _NewBook = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand FetchDataCommand
+        {
+            get; private set;
+        }
+
+        public AddUserCommand AddUserCommand
+        {
+            get; private set;
+        }
+
+        public AddBookCommand AddBookCommand
         {
             get; private set;
         }
@@ -86,6 +139,8 @@ namespace ViewModel
         private ObservableCollection<Book> _Books;
         private Book _SelectedBook;
         private User _SelectedUser;
+        private User _NewUser;
+        private Book _NewBook;
         public string ResultText { get; set; }
     }
 }
