@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Reactive;
+using System.Reactive.Linq;
 
 using Model.Repository;
 using Model.Data;
@@ -17,11 +19,19 @@ namespace ViewModel
             NewBook = new Book();
             SelectedBook = null;
             SelectedUser = null;
-            ResultText = "Test";
             Database = new Database();
-            //FetchDataCommand = new RelayCommand(Database = new Database());
-            AddUserCommand = new AddUserCommand(AddUser);//new RelayCommand(() => Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = UserNameText, Surname = UserSurnameNameText, Address = "AAA" }));
-            AddBookCommand = new AddBookCommand(AddBook);//new RelayCommand(() => Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = UserNameText, Surname = UserSurnameNameText, Address = "AAA" }));
+
+            AddUserCommand = new AddUserCommand(AddUser);
+            AddBookCommand = new AddBookCommand(AddBook);
+            ClosePopupCommand = new ClosePopupCommand(ClosePopup);
+
+            ReactiveMessageShow = true;
+            MessageContent = "";
+
+            _ReactiveTimer = new ReactiveTimer(TimeSpan.FromSeconds(10));
+            _TickObservable = Observable.FromEventPattern<ReactiveEvent>(_ReactiveTimer, "Tick");
+            _Observer = _TickObservable.Subscribe(x => ReactiveMessageShow = true);
+            _ReactiveTimer.Start();
         }
 
         public void AddUser(User user)
@@ -40,6 +50,11 @@ namespace ViewModel
 
             Books.Add(new Book { ID = Guid.NewGuid().ToString(), Title = book.Title, Author = book.Author });
             NewBook = new Book();
+        }
+
+        public void ClosePopup()
+        {
+            ReactiveMessageShow = false;
         }
 
         public ObservableCollection<User> Users
@@ -73,21 +88,11 @@ namespace ViewModel
             get
             {
                 return _OrderedBooks;
-                /*SelectedUser = Database.Users[0];
-                if (SelectedUser == null)
-                    return null;
-
-                List<Order> orderList = Database.Orders.FindAll(o => o.UserID == SelectedUser.ID);
-                ObservableCollection<Book> orderedBooks = new ObservableCollection<Book>();
-                
-                for (int i = 0; i < orderList.Count; i++)
-                    orderedBooks.Add(Database.Books.Find(b => b.ID == orderList[i].BookID));
-                
-                return orderedBooks;*/// Database.Books.FindAll(c => c.ID == (Database.Orders.FindAll(o => o.UserID == SelectedUser.ID)).BookID);
             }
             set
             {
                 _OrderedBooks = value;
+                MessageContent = "";
                 RaisePropertyChanged();
             }
         }
@@ -152,9 +157,30 @@ namespace ViewModel
             }
         }
 
-        public RelayCommand FetchDataCommand
+        public bool ReactiveMessageShow
         {
-            get; private set;
+            get
+            {
+                return _ReactiveMessageShow;
+            }
+            set
+            {
+                _ReactiveMessageShow = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string MessageContent
+        {
+            get
+            {
+                return _MessageContent;
+            }
+            private set
+            {
+                _MessageContent = "In our library you can find over " + (_Books.Count - 1).ToString() + " books!";
+                RaisePropertyChanged();
+            }
         }
 
         public AddUserCommand AddUserCommand
@@ -167,6 +193,11 @@ namespace ViewModel
             get; private set;
         }
 
+        public ClosePopupCommand ClosePopupCommand
+        {
+            get; private set;
+        }
+
         private Database _Database;
         private ObservableCollection<User> _Users;
         private ObservableCollection<Book> _Books;
@@ -175,6 +206,12 @@ namespace ViewModel
         private User _SelectedUser;
         private User _NewUser;
         private Book _NewBook;
-        public string ResultText { get; set; }
+
+        private ReactiveTimer _ReactiveTimer;
+        private IObservable<EventPattern<ReactiveEvent>> _TickObservable;
+        private IDisposable _Observer; 
+
+        private bool _ReactiveMessageShow;
+        private string _MessageContent;
     }
 }
