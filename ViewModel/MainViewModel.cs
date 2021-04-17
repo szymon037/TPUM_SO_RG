@@ -15,8 +15,6 @@ namespace ViewModel
     {
         public MainViewModel()
         {
-            NewUser = new User();
-            NewBook = new Book();
             SelectedBook = null;
             SelectedUser = null;
             Database = new Database();
@@ -34,22 +32,20 @@ namespace ViewModel
             _ReactiveTimer.Start();
         }
 
-        public void AddUser(User user)
+        public void AddUser(string userName)
         {
-            if (user.Name == null || user.Surname == null)
+            if (userName == null)
                 return;
 
-            Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = user.Name, Surname = user.Surname, Address = user.Address });
-            NewUser = new User();
+            Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = userName, Address = "" });
         }
 
-        public void AddBook(Book book)
+        public void AddBook(string bookTitle)
         {
-            if (book.Title == null || book.Author == null)
+            if (bookTitle == null)
                 return;
 
-            Books.Add(new Book { ID = Guid.NewGuid().ToString(), Title = book.Title, Author = book.Author });
-            NewBook = new Book();
+            Books.Add(new Book { ID = Guid.NewGuid().ToString(), Title = bookTitle, Author = "" });
         }
 
         public void ClosePopup()
@@ -137,26 +133,6 @@ namespace ViewModel
             }
         }
 
-        public User NewUser
-        {
-            get => _NewUser;
-            set
-            {
-                _NewUser = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public Book NewBook
-        {
-            get => _NewBook;
-            set
-            {
-                _NewBook = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool ReactiveMessageShow
         {
             get
@@ -204,8 +180,6 @@ namespace ViewModel
         private ObservableCollection<Book> _OrderedBooks;
         private Book _SelectedBook;
         private User _SelectedUser;
-        private User _NewUser;
-        private Book _NewBook;
 
         private ReactiveTimer _ReactiveTimer;
         private IObservable<EventPattern<ReactiveEvent>> _TickObservable;

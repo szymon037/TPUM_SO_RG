@@ -7,16 +7,16 @@ namespace ViewModel.Commands
 {
     public class AddUserCommand : RelayCommand
     {
-        public AddUserCommand(Action<User> execute)
+        public AddUserCommand(Action<string> execute)
         {
             AddUser = execute;
         }
 
         public override void Execute(object parameter)
         {
-            AddUser((User)parameter);
+            AddUser((string)parameter);
         }
 
-        public Action<User> AddUser;
+        public Action<string> AddUser;
     }
 }

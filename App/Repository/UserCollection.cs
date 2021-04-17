@@ -50,7 +50,6 @@ namespace Model.Repository
             if (user != null)
             {
                 user.Name = entity.Name;
-                user.Surname = entity.Surname;
                 user.Address = entity.Address;
             }
 
