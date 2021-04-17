@@ -11,7 +11,7 @@
         <vm:MainViewModel x:Key="MainViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource MainViewModel}">
-        <ListBox ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" Grid.Column="0" Grid.Row="0" Margin="0,-2,474,150">
+        <ListBox ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" Grid.Column="0" Grid.Row="0" Margin="0,-2,0,150" HorizontalAlignment="Left" Width="180">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
@@ -21,8 +21,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Content="Click the button to load new data" Grid.Column="0" Command="{Binding FetchDataCommand}" Margin="0,387,0,0"/>
-        <ListBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" Grid.Column="0" Grid.Row="0" Margin="331,0,143,148">
+        <!--<Button Content="Click the button to load new data" Grid.Column="0" Command="{Binding FetchDataCommand}" Margin="0,387,0,0"/>-->
+        <ListBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" Grid.Column="0" Grid.Row="0" Margin="199,0,0,148" HorizontalAlignment="Left" Width="180">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
@@ -32,16 +32,26 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Content="Add User" Command="{Binding AddUserCommand}" CommandParameter="{Binding NewUser}" HorizontalAlignment="Left" Margin="76,354,0,0" VerticalAlignment="Top"/>
-        <Button Content="Add Book" Command="{Binding AddBookCommand}" CommandParameter="{Binding NewBook}" HorizontalAlignment="Left" Margin="460,354,0,0" VerticalAlignment="Top"/>
+        <ListBox ItemsSource="{Binding OrderedBooks}" SelectedItem="{Binding SelectedBook}" Grid.Column="0" Grid.Row="0" Margin="400,0,0,148" HorizontalAlignment="Left" Width="180">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="{Binding Title}"/>
+                        <Label Content="{Binding Author}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Content="Add User" Command="{Binding AddUserCommand}" CommandParameter="{Binding NewUser}" HorizontalAlignment="Left" Margin="76,354,0,0" VerticalAlignment="Top" Width="60"/>
+        <Button Content="Add Book" Command="{Binding AddBookCommand}" CommandParameter="{Binding NewBook}" HorizontalAlignment="Left" Margin="270,354,0,0" VerticalAlignment="Top" Width="60"/>
         <TextBlock HorizontalAlignment="Left" Margin="35,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="pl-pl" Text="Name"/></TextBlock>
         <TextBlock HorizontalAlignment="Left" Margin="20,328,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Surname"/>
         <TextBox Name ="UserName" HorizontalAlignment="Left" Margin="76,298,0,0" Text="{Binding NewUser.Name}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox Name ="UserSurname" HorizontalAlignment="Left" Margin="76,326,0,0" Text="{Binding NewUser.Surname}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="400,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Author"/>
-        <TextBlock HorizontalAlignment="Left" Margin="414,328,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Title"/>
-        <TextBox Name ="BookAuthor" HorizontalAlignment="Left" Margin="460,298,0,0" Text="{Binding NewBook.Author}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name ="BookTitle" HorizontalAlignment="Left" Margin="460,326,0,0" Text="{Binding NewBook.Title}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="209,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Author"/>
+        <TextBlock HorizontalAlignment="Left" Margin="223,328,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Title"/>
+        <TextBox Name ="BookAuthor" HorizontalAlignment="Left" Margin="270,298,0,0" Text="{Binding NewBook.Author}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name ="BookTitle" HorizontalAlignment="Left" Margin="270,326,0,0" Text="{Binding NewBook.Title}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

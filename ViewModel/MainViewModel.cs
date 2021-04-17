@@ -68,6 +68,30 @@ namespace ViewModel
             }
         }
 
+        public ObservableCollection<Book> OrderedBooks
+        {
+            get
+            {
+                return _OrderedBooks;
+                /*SelectedUser = Database.Users[0];
+                if (SelectedUser == null)
+                    return null;
+
+                List<Order> orderList = Database.Orders.FindAll(o => o.UserID == SelectedUser.ID);
+                ObservableCollection<Book> orderedBooks = new ObservableCollection<Book>();
+                
+                for (int i = 0; i < orderList.Count; i++)
+                    orderedBooks.Add(Database.Books.Find(b => b.ID == orderList[i].BookID));
+                
+                return orderedBooks;*/// Database.Books.FindAll(c => c.ID == (Database.Orders.FindAll(o => o.UserID == SelectedUser.ID)).BookID);
+            }
+            set
+            {
+                _OrderedBooks = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public Database Database
         {
             get => _Database;
@@ -96,6 +120,15 @@ namespace ViewModel
             {
                 _SelectedUser = value;
                 RaisePropertyChanged();
+                if (_SelectedUser == null)
+                    return;
+                List<Order> orderList = Database.Orders.FindAll(o => o.UserID == SelectedUser.ID);
+                ObservableCollection<Book> orderedBooks = new ObservableCollection<Book>();
+
+                for (int i = 0; i < orderList.Count; i++)
+                    orderedBooks.Add(Database.Books.Find(b => b.ID == orderList[i].BookID));
+
+                OrderedBooks = orderedBooks;
             }
         }
 
@@ -137,6 +170,7 @@ namespace ViewModel
         private Database _Database;
         private ObservableCollection<User> _Users;
         private ObservableCollection<Book> _Books;
+        private ObservableCollection<Book> _OrderedBooks;
         private Book _SelectedBook;
         private User _SelectedUser;
         private User _NewUser;
