@@ -57,7 +57,7 @@ namespace Logic.Systems
         {
             var res = OrderCollection.Get(order.ID);
             res.Returned = true;
-            OrderCollection.Update(res.ID, res);
+            OrderCollection.Update(res);
             return Translator.TranslateBook(BookCollection.Get(res.BookID));
         }
 
