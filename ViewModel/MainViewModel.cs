@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 
 using Logic.DataDTO;
 using Logic.Systems;
+using Logic;
 using ViewModel.Commands;
 
 namespace ViewModel
@@ -14,12 +15,12 @@ namespace ViewModel
     {
         public MainViewModel()
         {
-            UserService = new UserSystem();
-            BookService = new BookSystem();
-            OrderService = new OrderSystem();
+            UserSystem = new UserSystem();
+            BookSystem = new BookSystem();
+            OrderSystem = new OrderSystem();
 
-            Users = new ObservableCollection<UserDTO>(UserService.GetUsers());
-            Books = new ObservableCollection<BookDTO>(BookService.GetAvailableBooks());
+            Users = new ObservableCollection<UserDTO>(UserSystem.GetUsers());
+            Books = new ObservableCollection<BookDTO>(BookSystem.GetAvailableBooks());
 
             AddUserCommand = new AddUserCommand(AddUser);
             AddBookCommand = new AddBookCommand(AddBook);
@@ -41,7 +42,7 @@ namespace ViewModel
             if (userName == null)
                 return;
 
-            var res = UserService.AddUser(new UserDTO { Name = userName, Address = "" });
+            var res = UserSystem.AddUser(new UserDTO { Name = userName, Address = "" });
             if (res is null) return;
             Users.Add(res);
         }
@@ -51,7 +52,7 @@ namespace ViewModel
             if (bookTitle == null)
                 return;
 
-            var res = BookService.AddBook(new BookDTO { Title = bookTitle, Author = "" });
+            var res = BookSystem.AddBook(new BookDTO { Title = bookTitle, Author = "" });
             if (res is null) return;
             Books.Add(res);
             MessageContent = "";
@@ -62,10 +63,10 @@ namespace ViewModel
             if (SelectedOrder == null || SelectedOrder.Returned)
                 return;
 
-            BookDTO book = OrderService.ReturnBook(SelectedOrder);
+            BookDTO book = OrderSystem.ReturnBook(SelectedOrder);
             if (book is null) return;
             Books.Add(book);
-            OrderedBooks = new ObservableCollection<OrderDTO>(OrderService.GetUserOrders(_SelectedUser.ID));
+            OrderedBooks = new ObservableCollection<OrderDTO>(OrderSystem.GetUserOrders(_SelectedUser.ID));
         }
 
         public void BorrowBook()
@@ -73,7 +74,7 @@ namespace ViewModel
             if (SelectedBook == null || SelectedUser == null)
                 return;
 
-            OrderDTO order = OrderService.BorrowBook(SelectedBook, SelectedUser);
+            OrderDTO order = OrderSystem.BorrowBook(SelectedBook, SelectedUser);
             if (order is null) return;
             Books.Remove(SelectedBook);
             OrderedBooks.Add(order);
@@ -143,7 +144,7 @@ namespace ViewModel
                 _SelectedUser = value;
                 RaisePropertyChanged();
 
-                OrderedBooks = new ObservableCollection<OrderDTO>(OrderService.GetUserOrders(_SelectedUser.ID));
+                OrderedBooks = new ObservableCollection<OrderDTO>(OrderSystem.GetUserOrders(_SelectedUser.ID));
             }
         }
 
@@ -162,7 +163,7 @@ namespace ViewModel
             get => _MessageContent;
             private set
             {
-                _MessageContent = "In our library you can find over " + (BookService.GetNumberOfBooks() - 1).ToString() + " books!";
+                _MessageContent = "In our library you can find over " + (BookSystem.GetNumberOfBooks() - 1).ToString() + " books!";
                 RaisePropertyChanged();
             }
         }
@@ -173,9 +174,9 @@ namespace ViewModel
         public ReturnBookCommand ReturnBookCommand { get; private set; }
         public BorrowBookCommand BorrowBookCommand { get; private set; }
 
-        private IUserSystem UserService;
-        private IOrderSystem OrderService;
-        private IBookSystem BookService;
+        private IUserSystem UserSystem;
+        private IOrderSystem OrderSystem;
+        private IBookSystem BookSystem;
 
         private ObservableCollection<UserDTO> _Users;
         private ObservableCollection<BookDTO> _Books;
