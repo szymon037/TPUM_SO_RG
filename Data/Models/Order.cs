@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Model.Data
+namespace Data.Models
 {
-    public class Order
+    public class Order : IData
     {
-        public int ID { get; set; }
         public int UserID { get; set; }
         public int BookID { get; set; }
-        public DateTime StartTime { get; set; }
+        public DateTime Start { get; set; }
         public bool Returned { get; set; }
     }
 }

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Model.Data
+namespace Data.Models
 {
-    public class User
+    public class User : IData
     {
-        public int ID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
     }

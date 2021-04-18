@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Model.Repository
 {
-    public interface ILibCollection<T>
+    public interface IBaseCollection<T>
     {
         T Add(T entity);
-        void Delete(string id);
+        void Delete(int id);
         IEnumerable<T> Get(Predicate<T> pred);
-        T Get(string id);
-        T Update(string id, T entity);
+        T Get(int id);
+        T Update(int id, T entity);
     }
 }

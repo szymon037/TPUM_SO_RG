@@ -11,6 +11,7 @@
     <Window.Resources>
         <vm:MainViewModel x:Key="MainViewModel"/>
         <BooleanToVisibilityConverter x:Key="Converter" />
+        <vm:BoolToReturnedConverter x:Key="ReturnedConverter" />
     </Window.Resources>
 
     <Grid DataContext="{StaticResource MainViewModel}">
@@ -44,14 +45,13 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="36*"/>
-                <RowDefinition Height="36*"/>
                 <RowDefinition Height="58.012"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Target="{Binding ElementName=UserName}" Content="Name:" Margin="0,0,6,8"/>
-            <TextBox Grid.Column="1" x:Name ="UserName" Text="{Binding NewUser.Name}" TextWrapping="Wrap" Margin="0,4,-35,4"/>
+            <TextBox Grid.Column="1" x:Name ="UserName" TextWrapping="Wrap" Margin="10,1,-45,37"/>
 
-            <Button Grid.Row="2" Content="Add User" Command="{Binding AddUserCommand}" CommandParameter="{Binding Text, ElementName=UserName}" Margin="30,5,-5,29" Grid.Column="1"/>
+            <Button Content="Add User" Command="{Binding AddUserCommand}" CommandParameter="{Binding Text, ElementName=UserName}" Margin="70,41,-45,51" Grid.Column="1" Grid.RowSpan="2"/>
         </Grid>
 
         <ListBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" Grid.Column="1" Grid.Row="0" Margin="10,8,0,10" HorizontalAlignment="Left" Width="220">
@@ -72,26 +72,27 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="36*"/>
-                <RowDefinition Height="36*"/>
-                <RowDefinition Height="58.012"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Target="{Binding ElementName=BookTitle}" Content="Title:" Margin="0,0,6,8"/>
-            <TextBox Grid.Column="1" x:Name ="BookTitle" Text="{Binding NewBook.Title}" TextWrapping="Wrap" Margin="0,4,-35,4"/>
+            <TextBox Grid.Column="1" x:Name ="BookTitle" TextWrapping="Wrap" Margin="0,0,-35,97"/>
 
-            <Button Grid.Row="2" Content="Add Book" Command="{Binding AddBookCommand}" CommandParameter="{Binding Text, ElementName=BookTitle}" Margin="30,5,-5,29" Grid.Column="1"/>
+            <Button Content="Add Book" Command="{Binding AddBookCommand}" CommandParameter="{Binding Text, ElementName=BookTitle}" Margin="60,42,-35,50" Grid.Column="1"/>
         </Grid>
 
-        <ListBox ItemsSource="{Binding OrderedBooks}" SelectedItem="{Binding SelectedBook}" Grid.Column="2" Grid.Row="0" Margin="10,10,0,10" HorizontalAlignment="Left" Width="220">
+        <ListBox ItemsSource="{Binding OrderedBooks}" SelectedItem="{Binding SelectedOrder}" Grid.Column="2" Grid.Row="0" Margin="10,10,0,10" HorizontalAlignment="Left" Width="220">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <Label Content="{Binding Title}"/>
+                        <Label Content="{Binding Book.Title}"/>
+                        <CheckBox Content="{Binding Path=Returned, Converter={StaticResource ReturnedConverter}}" IsEnabled="False"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <Button Content="Borrow book" Command="{Binding BorrowBookCommand}" Margin="24,74,23,41" Grid.Column="2" Grid.Row="1"/>
+        <Button Content="Return book" Command="{Binding ReturnBookCommand}" Margin="24,20,23,95" Grid.Column="2" Grid.Row="1"/>
 
         <Grid Grid.Column="0" Grid.Row="2" DataContext="{StaticResource MainViewModel}" Grid.ColumnSpan="3" Visibility="{Binding Path=ReactiveMessageShow, Converter={StaticResource Converter}}">
             <Grid.ColumnDefinitions>

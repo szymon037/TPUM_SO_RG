@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Model.Data
+namespace Logic.DataDTO
 {
-    public class Order
+    public class OrderDTO
     {
         public int ID { get; set; }
         public int UserID { get; set; }
-        public int BookID { get; set; }
-        public DateTime StartTime { get; set; }
+        public BookDTO Book { get; set; }
+        public int DaysBorrowed { get; set; }
         public bool Returned { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Model.Data;
 
 namespace Model.Repository
 {
-    public class OrderCollection : ILibCollection<Order>
+    public class OrderCollection : IBaseCollection<Order>
     {
         public List<Order> Orders { get; set; }
 
@@ -25,7 +25,7 @@ namespace Model.Repository
             return entity;
         }
 
-        public void Delete(string id)
+        public void Delete(int id)
         {
             Order order = Orders.Find(c => c.ID == id);
 
@@ -38,12 +38,12 @@ namespace Model.Repository
             return Orders.FindAll(pred);
         }
 
-        public Order Get(string id)
+        public Order Get(int id)
         {
             return Orders.Find(c => c.ID == id);
         }
 
-        public Order Update(string id, Order entity)
+        public Order Update(int id, Order entity)
         {
             Order order = Orders.Find(c => c.ID == id);
 

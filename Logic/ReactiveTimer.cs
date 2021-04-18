@@ -11,11 +11,7 @@ namespace ViewModel
             Counter = counter;
         }
 
-        public long Counter
-        {
-            get;
-            private set;
-        }
+        public long Counter { get; private set; }
     }
 
     public class ReactiveTimer : IDisposable

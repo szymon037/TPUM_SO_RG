@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Model.Data
+namespace Logic.DataDTO
 {
-    public class User
+    public class UserDTO
     {
         public int ID { get; set; }
         public string Name { get; set; }

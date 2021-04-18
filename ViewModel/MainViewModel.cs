@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using Model.Repository;
-using Model.Data;
+using Logic.DataDTO;
+using Logic;
 using ViewModel.Commands;
 
 namespace ViewModel
@@ -15,16 +14,19 @@ namespace ViewModel
     {
         public MainViewModel()
         {
-            SelectedBook = null;
-            SelectedUser = null;
-            Database = new Database();
+            LibrarySystem = new LibrarySystem();
+
+            Users = new ObservableCollection<UserDTO>(LibrarySystem.GetUsers());
+            Books = new ObservableCollection<BookDTO>(LibrarySystem.GetAvailableBooks());
 
             AddUserCommand = new AddUserCommand(AddUser);
             AddBookCommand = new AddBookCommand(AddBook);
             ClosePopupCommand = new ClosePopupCommand(ClosePopup);
+            ReturnBookCommand = new ReturnBookCommand(ReturnBook);
+            BorrowBookCommand = new BorrowBookCommand(BorrowBook);
 
-            ReactiveMessageShow = true;
-            MessageContent = "";
+            ReactiveMessageShow = false;
+            MessageContent = "Gen";
 
             _ReactiveTimer = new ReactiveTimer(TimeSpan.FromSeconds(10));
             _TickObservable = Observable.FromEventPattern<ReactiveEvent>(_ReactiveTimer, "Tick");
@@ -37,7 +39,9 @@ namespace ViewModel
             if (userName == null)
                 return;
 
-            Users.Add(new User { ID = Guid.NewGuid().ToString(), Name = userName, Address = "" });
+            var res = LibrarySystem.AddUser(new UserDTO { Name = userName, Address = "" });
+            if (res is null) return;
+            Users.Add(res);
         }
 
         public void AddBook(string bookTitle)
@@ -45,7 +49,32 @@ namespace ViewModel
             if (bookTitle == null)
                 return;
 
-            Books.Add(new Book { ID = Guid.NewGuid().ToString(), Title = bookTitle, Author = "" });
+            var res = LibrarySystem.AddBook(new BookDTO { Title = bookTitle, Author = "" });
+            if (res is null) return;
+            Books.Add(res);
+            MessageContent = "";
+        }
+
+        public void ReturnBook()
+        {
+            if (SelectedOrder == null || SelectedOrder.Returned)
+                return;
+
+            BookDTO book = LibrarySystem.ReturnBook(SelectedOrder);
+            if (book is null) return;
+            Books.Add(book);
+            OrderedBooks = new ObservableCollection<OrderDTO>(LibrarySystem.GetUserOrders(_SelectedUser.ID));
+        }
+
+        public void BorrowBook()
+        {
+            if (SelectedBook == null || SelectedUser == null)
+                return;
+
+            OrderDTO order = LibrarySystem.BorrowBook(SelectedBook, SelectedUser);
+            if (order is null) return;
+            Books.Remove(SelectedBook);
+            OrderedBooks.Add(order);
         }
 
         public void ClosePopup()
@@ -53,12 +82,9 @@ namespace ViewModel
             ReactiveMessageShow = false;
         }
 
-        public ObservableCollection<User> Users
+        public ObservableCollection<UserDTO> Users
         {
-            get
-            {
-                return _Users;
-            }
+            get => _Users;
             set
             {
                 _Users = value;
@@ -66,12 +92,9 @@ namespace ViewModel
             }
         }
 
-        public ObservableCollection<Book> Books
+        public ObservableCollection<BookDTO> Books
         {
-            get
-            {
-                return _Books;
-            }
+            get => _Books;
             set
             {
                 _Books = value;
@@ -79,12 +102,9 @@ namespace ViewModel
             }
         }
 
-        public ObservableCollection<Book> OrderedBooks
+        public ObservableCollection<OrderDTO> OrderedBooks
         {
-            get
-            {
-                return _OrderedBooks;
-            }
+            get => _OrderedBooks;
             set
             {
                 _OrderedBooks = value;
@@ -93,18 +113,7 @@ namespace ViewModel
             }
         }
 
-        public Database Database
-        {
-            get => _Database;
-            set
-            {
-                _Database = value;
-                Users = new ObservableCollection<User>(value.Users);
-                Books = new ObservableCollection<Book>(value.Books);
-            }
-        }
-
-        public Book SelectedBook
+        public BookDTO SelectedBook
         {
             get => _SelectedBook;
             set
@@ -114,31 +123,31 @@ namespace ViewModel
             }
         }
 
-        public User SelectedUser
+        public OrderDTO SelectedOrder
+        {
+            get => _SelectedOrder;
+            set
+            {
+                _SelectedOrder = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public UserDTO SelectedUser
         {
             get => _SelectedUser;
             set
             {
                 _SelectedUser = value;
                 RaisePropertyChanged();
-                if (_SelectedUser == null)
-                    return;
-                List<Order> orderList = Database.Orders.FindAll(o => o.UserID == SelectedUser.ID);
-                ObservableCollection<Book> orderedBooks = new ObservableCollection<Book>();
 
-                for (int i = 0; i < orderList.Count; i++)
-                    orderedBooks.Add(Database.Books.Find(b => b.ID == orderList[i].BookID));
-
-                OrderedBooks = orderedBooks;
+                OrderedBooks = new ObservableCollection<OrderDTO>(LibrarySystem.GetUserOrders(_SelectedUser.ID));
             }
         }
 
         public bool ReactiveMessageShow
         {
-            get
-            {
-                return _ReactiveMessageShow;
-            }
+            get => _ReactiveMessageShow;
             set
             {
                 _ReactiveMessageShow = value;
@@ -148,38 +157,29 @@ namespace ViewModel
 
         public string MessageContent
         {
-            get
-            {
-                return _MessageContent;
-            }
+            get => _MessageContent;
             private set
             {
-                _MessageContent = "In our library you can find over " + (_Books.Count - 1).ToString() + " books!";
+                _MessageContent = "In our library you can find over " + (LibrarySystem.GetNumberOfBooks() - 1).ToString() + " books!";
                 RaisePropertyChanged();
             }
         }
 
-        public AddUserCommand AddUserCommand
-        {
-            get; private set;
-        }
+        public AddUserCommand AddUserCommand { get; private set; }
+        public AddBookCommand AddBookCommand { get; private set; }
+        public ClosePopupCommand ClosePopupCommand { get; private set; }
+        public ReturnBookCommand ReturnBookCommand { get; private set; }
+        public BorrowBookCommand BorrowBookCommand { get; private set; }
 
-        public AddBookCommand AddBookCommand
-        {
-            get; private set;
-        }
+        private ISystem LibrarySystem;
 
-        public ClosePopupCommand ClosePopupCommand
-        {
-            get; private set;
-        }
+        private ObservableCollection<UserDTO> _Users;
+        private ObservableCollection<BookDTO> _Books;
+        private ObservableCollection<OrderDTO> _OrderedBooks;
 
-        private Database _Database;
-        private ObservableCollection<User> _Users;
-        private ObservableCollection<Book> _Books;
-        private ObservableCollection<Book> _OrderedBooks;
-        private Book _SelectedBook;
-        private User _SelectedUser;
+        private BookDTO _SelectedBook;
+        private OrderDTO _SelectedOrder;
+        private UserDTO _SelectedUser;
 
         private ReactiveTimer _ReactiveTimer;
         private IObservable<EventPattern<ReactiveEvent>> _TickObservable;
