@@ -8,6 +8,7 @@ namespace Logic.Systems
 {
     public interface IOrderSystem
     {
+        public OrderDTO GetOrder(int id);
         public IEnumerable<OrderDTO> GetOrders();
         public IEnumerable<OrderDTO> GetUserOrders(int userID);
         public IEnumerable<OrderDTO> GetUnfinishedOrders();
