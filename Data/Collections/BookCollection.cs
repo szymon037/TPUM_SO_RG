@@ -15,6 +15,11 @@ namespace Data.Collections
             Database = MockedDatabase.Instance;
         }
 
+        public BookCollection(IDatabase database)
+        {
+            Database = database;
+        }
+
         public Book Add(Book entity)
         {
             if (Database.Books.Find(c => c.Title.Equals(entity.Title)) == null)

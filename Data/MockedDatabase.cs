@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Data
 {
-    internal class MockedDatabase : IDatabase
+    public class MockedDatabase : IDatabase
     {
         public List<User> Users { get; set; }
         public List<Book> Books { get; set; }

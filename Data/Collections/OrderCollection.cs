@@ -15,6 +15,11 @@ namespace Data.Collections
             Database = MockedDatabase.Instance;
         }
 
+        public OrderCollection(IDatabase database)
+        {
+            Database = database;
+        }
+
         public Order Add(Order entity)
         {
             if (Database.Orders.Find(c => c.UserID == entity.UserID && c.BookID == entity.BookID) == null)

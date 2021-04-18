@@ -5,7 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 
 using Logic.DataDTO;
-using Logic;
+using Logic.Services;
 using ViewModel.Commands;
 
 namespace ViewModel
@@ -14,10 +14,12 @@ namespace ViewModel
     {
         public MainViewModel()
         {
-            LibrarySystem = new LibrarySystem();
+            UserService = new UserService();
+            BookService = new BookService();
+            OrderService = new OrderService();
 
-            Users = new ObservableCollection<UserDTO>(LibrarySystem.GetUsers());
-            Books = new ObservableCollection<BookDTO>(LibrarySystem.GetAvailableBooks());
+            Users = new ObservableCollection<UserDTO>(UserService.GetUsers());
+            Books = new ObservableCollection<BookDTO>(BookService.GetAvailableBooks());
 
             AddUserCommand = new AddUserCommand(AddUser);
             AddBookCommand = new AddBookCommand(AddBook);
@@ -39,7 +41,7 @@ namespace ViewModel
             if (userName == null)
                 return;
 
-            var res = LibrarySystem.AddUser(new UserDTO { Name = userName, Address = "" });
+            var res = UserService.AddUser(new UserDTO { Name = userName, Address = "" });
             if (res is null) return;
             Users.Add(res);
         }
@@ -49,7 +51,7 @@ namespace ViewModel
             if (bookTitle == null)
                 return;
 
-            var res = LibrarySystem.AddBook(new BookDTO { Title = bookTitle, Author = "" });
+            var res = BookService.AddBook(new BookDTO { Title = bookTitle, Author = "" });
             if (res is null) return;
             Books.Add(res);
             MessageContent = "";
@@ -60,10 +62,10 @@ namespace ViewModel
             if (SelectedOrder == null || SelectedOrder.Returned)
                 return;
 
-            BookDTO book = LibrarySystem.ReturnBook(SelectedOrder);
+            BookDTO book = OrderService.ReturnBook(SelectedOrder);
             if (book is null) return;
             Books.Add(book);
-            OrderedBooks = new ObservableCollection<OrderDTO>(LibrarySystem.GetUserOrders(_SelectedUser.ID));
+            OrderedBooks = new ObservableCollection<OrderDTO>(OrderService.GetUserOrders(_SelectedUser.ID));
         }
 
         public void BorrowBook()
@@ -71,7 +73,7 @@ namespace ViewModel
             if (SelectedBook == null || SelectedUser == null)
                 return;
 
-            OrderDTO order = LibrarySystem.BorrowBook(SelectedBook, SelectedUser);
+            OrderDTO order = OrderService.BorrowBook(SelectedBook, SelectedUser);
             if (order is null) return;
             Books.Remove(SelectedBook);
             OrderedBooks.Add(order);
@@ -141,7 +143,7 @@ namespace ViewModel
                 _SelectedUser = value;
                 RaisePropertyChanged();
 
-                OrderedBooks = new ObservableCollection<OrderDTO>(LibrarySystem.GetUserOrders(_SelectedUser.ID));
+                OrderedBooks = new ObservableCollection<OrderDTO>(OrderService.GetUserOrders(_SelectedUser.ID));
             }
         }
 
@@ -160,7 +162,7 @@ namespace ViewModel
             get => _MessageContent;
             private set
             {
-                _MessageContent = "In our library you can find over " + (LibrarySystem.GetNumberOfBooks() - 1).ToString() + " books!";
+                _MessageContent = "In our library you can find over " + (BookService.GetNumberOfBooks() - 1).ToString() + " books!";
                 RaisePropertyChanged();
             }
         }
@@ -171,7 +173,9 @@ namespace ViewModel
         public ReturnBookCommand ReturnBookCommand { get; private set; }
         public BorrowBookCommand BorrowBookCommand { get; private set; }
 
-        private ISystem LibrarySystem;
+        private IUserService UserService;
+        private IOrderService OrderService;
+        private IBookService BookService;
 
         private ObservableCollection<UserDTO> _Users;
         private ObservableCollection<BookDTO> _Books;

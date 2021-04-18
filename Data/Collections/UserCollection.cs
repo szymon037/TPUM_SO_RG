@@ -15,6 +15,11 @@ namespace Data.Collections
             Database = MockedDatabase.Instance;
         }
 
+        public UserCollection(IDatabase database)
+        {
+            Database = database;
+        }
+
         public User Add(User entity)
         {
             if (Database.Users.Find(c => c.Name.Equals(entity.Name)) == null)

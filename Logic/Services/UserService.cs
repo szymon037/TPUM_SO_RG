@@ -8,7 +8,7 @@ using Logic.DataDTO;
 
 namespace Logic.Services
 {
-    internal class UserService
+    public class UserService : IUserService
     {
         private ILibraryCollection<User> UserCollection;
 

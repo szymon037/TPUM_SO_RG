@@ -8,7 +8,7 @@ using Logic.DataDTO;
 
 namespace Logic.Services
 {
-    internal class OrderService
+    public class OrderService : IOrderService
     {
         private ILibraryCollection<Order> OrderCollection;
         private ILibraryCollection<Book> BookCollection;

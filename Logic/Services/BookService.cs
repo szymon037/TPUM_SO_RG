@@ -7,7 +7,7 @@ using Logic.DataDTO;
 
 namespace Logic.Services
 {
-    internal class BookService
+    public class BookService : IBookService
     {
         private ILibraryCollection<Book> BookCollection;
         private ILibraryCollection<Order> OrderCollection;
@@ -35,6 +35,11 @@ namespace Logic.Services
         public BookDTO GetBook(int id)
         {
             return Translator.TranslateBook(BookCollection.Get(id));
+        }
+
+        public int GetNumberOfBooks()
+        {
+            return GetBooks().Count();
         }
 
         public IEnumerable<BookDTO> GetBooks()
