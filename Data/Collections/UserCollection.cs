@@ -54,9 +54,9 @@ namespace Data.Collections
             return Database.Users;
         }
 
-        public User Update(int id, User entity)
+        public User Update(User entity)
         {
-            User user = Database.Users.Find(c => c.ID == id);
+            User user = Database.Users.Find(c => c.ID == entity.ID);
 
             if (user != null)
             {

@@ -54,9 +54,9 @@ namespace Data.Collections
             return Database.Orders;
         }
 
-        public Order Update(int id, Order entity)
+        public Order Update(Order entity)
         {
-            Order order = Database.Orders.Find(c => c.ID == id);
+            Order order = Database.Orders.Find(c => c.ID == entity.ID);
 
             if (order != null)
             {

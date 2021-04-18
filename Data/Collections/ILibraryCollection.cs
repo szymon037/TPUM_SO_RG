@@ -11,6 +11,6 @@ namespace Data.Collections
         IEnumerable<T> Get();
         IEnumerable<T> Get(Predicate<T> pred);
         T Get(int id);
-        T Update(int id, T entity);
+        T Update(T entity);
     }
 }

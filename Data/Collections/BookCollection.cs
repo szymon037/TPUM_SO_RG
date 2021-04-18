@@ -54,9 +54,9 @@ namespace Data.Collections
             return Database.Books;
         }
 
-        public Book Update(int id, Book entity)
+        public Book Update(Book entity)
         {
-            Book book = Database.Books.Find(c => c.ID == id);
+            Book book = Database.Books.Find(c => c.ID == entity.ID);
 
             if (book != null)
             {

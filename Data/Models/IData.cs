@@ -9,7 +9,7 @@ namespace Data.Models
         private static int Counter = 1;
         private static object Lock = new object();
 
-        public int ID { get; private set; }
+        public int ID { get; set; }
 
         public IData()
         {
