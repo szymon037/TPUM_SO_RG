@@ -2,7 +2,7 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
-namespace ViewModel
+namespace Logic
 {
     public class ReactiveEvent : EventArgs
     {
