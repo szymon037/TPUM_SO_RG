@@ -4,19 +4,26 @@ using System.Linq;
 
 using Data.Collections;
 using Data.Models;
+using Data;
 using Logic.DataDTO;
 
-namespace Logic.Services
+namespace Logic.Systems
 {
-    public class OrderService : IOrderService
+    public class OrderSystem : IOrderSystem
     {
         private ILibraryCollection<Order> OrderCollection;
         private ILibraryCollection<Book> BookCollection;
 
-        public OrderService()
+        public OrderSystem()
         {
             OrderCollection = new OrderCollection();
             BookCollection = new BookCollection();
+        }
+
+        public OrderSystem(IDatabase database)
+        {
+            OrderCollection = new OrderCollection(database);
+            BookCollection = new BookCollection(database);
         }
 
         public OrderDTO GetOrder(int id)

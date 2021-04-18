@@ -3,19 +3,26 @@ using System.Linq;
 
 using Data.Collections;
 using Data.Models;
+using Data;
 using Logic.DataDTO;
 
-namespace Logic.Services
+namespace Logic.Systems
 {
-    public class BookService : IBookService
+    public class BookSystem : IBookSystem
     {
         private ILibraryCollection<Book> BookCollection;
         private ILibraryCollection<Order> OrderCollection;
 
-        public BookService()
+        public BookSystem()
         {
             BookCollection = new BookCollection();
             OrderCollection = new OrderCollection();
+        }
+
+        public BookSystem(IDatabase database)
+        {
+            BookCollection = new BookCollection(database);
+            OrderCollection = new OrderCollection(database);
         }
 
         public BookDTO AddBook(BookDTO book)

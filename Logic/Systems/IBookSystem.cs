@@ -4,9 +4,9 @@ using System.Text;
 
 using Logic.DataDTO;
 
-namespace Logic.Services
+namespace Logic.Systems
 {
-    public interface IBookService
+    public interface IBookSystem
     {
         public BookDTO AddBook(BookDTO book);
         public BookDTO GetBook(int id);

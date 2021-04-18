@@ -4,17 +4,23 @@ using System.Linq;
 
 using Data.Collections;
 using Data.Models;
+using Data;
 using Logic.DataDTO;
 
-namespace Logic.Services
+namespace Logic.Systems
 {
-    public class UserService : IUserService
+    public class UserSystem : IUserSystem
     {
         private ILibraryCollection<User> UserCollection;
 
-        public UserService()
+        public UserSystem()
         {
             UserCollection = new UserCollection();
+        }
+
+        public UserSystem(IDatabase database)
+        {
+            UserCollection = new UserCollection(database);
         }
 
         public UserDTO AddUser(UserDTO user)

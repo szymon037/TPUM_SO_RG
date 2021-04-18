@@ -4,9 +4,9 @@ using System.Text;
 
 using Logic.DataDTO;
 
-namespace Logic.Services
+namespace Logic.Systems
 {
-    public interface IUserService
+    public interface IUserSystem
     {
         public UserDTO AddUser(UserDTO user);
         public UserDTO GetUser(int id);

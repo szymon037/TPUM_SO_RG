@@ -5,7 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 
 using Logic.DataDTO;
-using Logic.Services;
+using Logic.Systems;
 using ViewModel.Commands;
 
 namespace ViewModel
@@ -14,9 +14,9 @@ namespace ViewModel
     {
         public MainViewModel()
         {
-            UserService = new UserService();
-            BookService = new BookService();
-            OrderService = new OrderService();
+            UserService = new UserSystem();
+            BookService = new BookSystem();
+            OrderService = new OrderSystem();
 
             Users = new ObservableCollection<UserDTO>(UserService.GetUsers());
             Books = new ObservableCollection<BookDTO>(BookService.GetAvailableBooks());
@@ -173,9 +173,9 @@ namespace ViewModel
         public ReturnBookCommand ReturnBookCommand { get; private set; }
         public BorrowBookCommand BorrowBookCommand { get; private set; }
 
-        private IUserService UserService;
-        private IOrderService OrderService;
-        private IBookService BookService;
+        private IUserSystem UserService;
+        private IOrderSystem OrderService;
+        private IBookSystem BookService;
 
         private ObservableCollection<UserDTO> _Users;
         private ObservableCollection<BookDTO> _Books;

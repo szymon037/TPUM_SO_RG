@@ -4,9 +4,9 @@ using System.Text;
 
 using Logic.DataDTO;
 
-namespace Logic.Services
+namespace Logic.Systems
 {
-    public interface IOrderService
+    public interface IOrderSystem
     {
         public IEnumerable<OrderDTO> GetOrders();
         public IEnumerable<OrderDTO> GetUserOrders(int userID);
