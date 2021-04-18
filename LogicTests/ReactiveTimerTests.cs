@@ -14,22 +14,19 @@ namespace Logic.Tests
         [TestMethod]
         public void ReactiveTimerTest()
         {
-            using (ReactiveTimer reactiveTimer = new ReactiveTimer(TimeSpan.FromSeconds(1)))
-            {
-                bool test = false;
+            bool test = false;
+            ReactiveTimer reactiveTimer = new ReactiveTimer(TimeSpan.FromSeconds(1));
+            IObservable<System.Reactive.EventPattern<ReactiveEvent>> _tickObservable = Observable.FromEventPattern<ReactiveEvent>(reactiveTimer, "Tick");
+            IDisposable _observer = _tickObservable.Subscribe(x => test = !test);
+            reactiveTimer.Start();
 
-                IObservable<System.Reactive.EventPattern<ReactiveEvent>> _tickObservable = Observable.FromEventPattern<ReactiveEvent>(reactiveTimer, "Tick");
-                IDisposable _observer = _tickObservable.Subscribe(x => test = !test);
-                reactiveTimer.Start();
+            Assert.IsFalse(test);
 
-                Assert.IsFalse(test);
+            System.Threading.Thread.Sleep(1100);
+            Assert.IsTrue(test);
 
-                System.Threading.Thread.Sleep(1100);
-                Assert.IsTrue(test);
-
-                System.Threading.Thread.Sleep(1100);
-                Assert.IsFalse(test);
-            }
+            System.Threading.Thread.Sleep(1100);
+            Assert.IsFalse(test);
         }
     }
 }

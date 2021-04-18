@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Logic.Systems;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+
+using Logic.DataDTO;
+using LogicTests;
 
 namespace Logic.Systems.Tests
 {
@@ -12,19 +13,38 @@ namespace Logic.Systems.Tests
         [TestMethod()]
         public void AddUserTest()
         {
-            Assert.Fail();
+            IUserSystem UserSystem = new UserSystem(new LogicTestDatabse());
+            UserDTO b = new UserDTO() { Name = "User1", Address = "Address1" };
+
+            Assert.AreEqual(0, UserSystem.GetUsers().Count());
+
+            b = UserSystem.AddUser(b);
+
+            Assert.IsNotNull(UserSystem.GetUser(b.ID));
+            Assert.AreEqual(1, UserSystem.GetUsers().Count());
         }
 
         [TestMethod()]
         public void GetUserTest()
         {
-            Assert.Fail();
+            IUserSystem UserSystem = new UserSystem(new LogicTestDatabse());
+            UserDTO b = new UserDTO() { Name = "User1", Address = "Address1" };
+            b = UserSystem.AddUser(b);
+            Assert.IsNotNull(UserSystem.GetUser(b.ID));
         }
 
         [TestMethod()]
         public void GetUsersTest()
         {
-            Assert.Fail();
+            IUserSystem UserSystem = new UserSystem(new LogicTestDatabse());
+
+            UserDTO b = new UserDTO() { Name = "User1", Address = "Address1" };
+            UserSystem.AddUser(b);
+
+            b = new UserDTO() { Name = "User2", Address = "Address2" };
+            UserSystem.AddUser(b);
+
+            Assert.AreEqual(2, UserSystem.GetUsers().Count());
         }
     }
 }
