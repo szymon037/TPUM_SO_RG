@@ -15,7 +15,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void AddTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new TestDatabase());
+            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
             UserCollection.Add(new User { Name = "User1", Address = "User1Address" });
             Assert.IsNotNull(UserCollection.Get((u => u.Name == "User1")));
         }
@@ -23,7 +23,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void DeleteTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new TestDatabase());
+            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
             User u = new User { Name = "User1", Address = "User1Address" };
             UserCollection.Add(u);
             UserCollection.Delete(u.ID);
@@ -33,7 +33,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new TestDatabase());
+            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
             User u1 = new User { Name = "User1", Address = "User1Address" };
             User u2 = new User { Name = "User2", Address = "User2Address" };
             UserCollection.Add(u1);
@@ -44,7 +44,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest1()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new TestDatabase());
+            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
             User u1 = new User { Name = "User1", Address = "User1Address" };
             UserCollection.Add(u1);
             Assert.IsNotNull(UserCollection.Get(u1.ID));
@@ -53,7 +53,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest2()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new TestDatabase());
+            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
             User u1 = new User { Name = "User1", Address = "User1Address" };
             UserCollection.Add(u1);
             Assert.IsNotNull(UserCollection.Get());
@@ -62,7 +62,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void UpdateTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new TestDatabase());
+            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
             User u1 = new User { Name = "User1", Address = "User1Address" };
             User u2 = new User { Name = "User1", Address = "User2Address" };
             UserCollection.Add(u1);

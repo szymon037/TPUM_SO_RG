@@ -15,7 +15,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void AddTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new TestDatabase());
+            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
             OrderCollection.Add(new Order { UserID = 1, BookID = 1 });
             Assert.IsNotNull(OrderCollection.Get((o => o.UserID == 1)));
         }
@@ -23,7 +23,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void DeleteTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new TestDatabase());
+            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
             Order o = new Order { UserID = 1, BookID = 1 };
             OrderCollection.Add(o);
             OrderCollection.Delete(o.ID);
@@ -33,7 +33,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new TestDatabase());
+            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
             Order o1 = new Order { UserID = 1, BookID = 1 };
             Order o2 = new Order { UserID = 1, BookID = 2 };
             OrderCollection.Add(o1);
@@ -44,7 +44,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest1()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new TestDatabase());
+            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
             Order o1 = new Order { UserID = 1, BookID = 1 };
             OrderCollection.Add(o1);
             Assert.IsNotNull(OrderCollection.Get(o1.ID));
@@ -53,7 +53,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest2()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new TestDatabase());
+            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
             Order b1 = new Order { UserID = 1, BookID = 1 };
             OrderCollection.Add(b1);
             Assert.IsNotNull(OrderCollection.Get());
@@ -62,7 +62,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void UpdateTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new TestDatabase());
+            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
             Order o1 = new Order { UserID = 1, BookID = 1 };
             Order o2 = new Order { UserID = 1, BookID = 2 };
             OrderCollection.Add(o1);

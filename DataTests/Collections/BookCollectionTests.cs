@@ -15,7 +15,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void AddTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new TestDatabase());
+            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
             BookCollection.Add(new Book { Title = "Book1", Author = "Author1" });
             Assert.IsNotNull(BookCollection.Get((b => b.Title == "Book1")));
         }
@@ -23,7 +23,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void DeleteTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new TestDatabase());
+            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
             Book b = new Book { Title = "Book1", Author = "Author1" };
             BookCollection.Add(b);
             BookCollection.Delete(b.ID);
@@ -33,7 +33,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new TestDatabase());
+            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
             Book b1 = new Book { Title = "Book1", Author = "Author1" };
             Book b2 = new Book { Title = "Book2", Author = "Author1" };
             BookCollection.Add(b1);
@@ -44,7 +44,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest1()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new TestDatabase());
+            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
             Book b1 = new Book { Title = "Book1", Author = "Author1" };
             BookCollection.Add(b1);
             Assert.IsNotNull(BookCollection.Get(b1.ID));
@@ -53,7 +53,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void GetTest2()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new TestDatabase());
+            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
             Book b1 = new Book { Title = "Book1", Author = "Author1" };
             BookCollection.Add(b1);
             Assert.IsNotNull(BookCollection.Get());
@@ -62,7 +62,7 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void UpdateTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new TestDatabase());
+            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
             Book b1 = new Book { Title = "Book1", Author = "Author1" };
             Book b2 = new Book { Title = "Book2", Author = "Author1" };
             BookCollection.Add(b1);
