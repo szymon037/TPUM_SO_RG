@@ -7,12 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel", "ViewModel\View
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "View", "View\View.csproj", "{2EB6020B-8EA2-4593-A1C5-F320B8116CB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{76FF56CB-3B75-467B-A351-EDE49A01B964}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{76FF56CB-3B75-467B-A351-EDE49A01B964}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{F4C7F1DA-80A1-4DC6-85F7-A09115423C39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{F4C7F1DA-80A1-4DC6-85F7-A09115423C39}"
 	ProjectSection(ProjectDependencies) = postProject
 		{76FF56CB-3B75-467B-A351-EDE49A01B964} = {76FF56CB-3B75-467B-A351-EDE49A01B964}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTests", "DataTests\DataTests.csproj", "{5F0333DF-7E35-4E98-B1C6-38B1A313E682}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{F4C7F1DA-80A1-4DC6-85F7-A09115423C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4C7F1DA-80A1-4DC6-85F7-A09115423C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4C7F1DA-80A1-4DC6-85F7-A09115423C39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0333DF-7E35-4E98-B1C6-38B1A313E682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0333DF-7E35-4E98-B1C6-38B1A313E682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0333DF-7E35-4E98-B1C6-38B1A313E682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0333DF-7E35-4E98-B1C6-38B1A313E682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
