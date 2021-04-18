@@ -20,10 +20,10 @@ namespace Logic.Systems
             BookCollection = new BookCollection();
         }
 
-        public OrderSystem(IDatabase database)
+        public OrderSystem(ILibraryCollection<Book> bC, ILibraryCollection<Order> oC)
         {
-            OrderCollection = new OrderCollection(database);
-            BookCollection = new BookCollection(database);
+            BookCollection = bC;
+            OrderCollection = oC;
         }
 
         public OrderDTO GetOrder(int id)
@@ -56,6 +56,7 @@ namespace Logic.Systems
         public BookDTO ReturnBook(OrderDTO order)
         {
             var res = OrderCollection.Get(order.ID);
+            order.Returned = true;
             res.Returned = true;
             OrderCollection.Update(res);
             return Translator.TranslateBook(BookCollection.Get(res.BookID));

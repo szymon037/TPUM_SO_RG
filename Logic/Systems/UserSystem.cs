@@ -18,9 +18,9 @@ namespace Logic.Systems
             UserCollection = new UserCollection();
         }
 
-        public UserSystem(IDatabase database)
+        public UserSystem(ILibraryCollection<User> uC)
         {
-            UserCollection = new UserCollection(database);
+            UserCollection = uC;
         }
 
         public UserDTO AddUser(UserDTO user)

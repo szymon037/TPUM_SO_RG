@@ -4,6 +4,7 @@ using System.Linq;
 
 using Logic.DataDTO;
 using LogicTests;
+using Data.Models;
 
 namespace Logic.Systems.Tests
 {
@@ -13,7 +14,7 @@ namespace Logic.Systems.Tests
         [TestMethod()]
         public void AddUserTest()
         {
-            IUserSystem UserSystem = new UserSystem(new LogicTestDatabse());
+            IUserSystem UserSystem = new UserSystem(new ImpUserCollection());
             UserDTO b = new UserDTO() { Name = "User1", Address = "Address1" };
 
             Assert.AreEqual(0, UserSystem.GetUsers().Count());
@@ -27,22 +28,23 @@ namespace Logic.Systems.Tests
         [TestMethod()]
         public void GetUserTest()
         {
-            IUserSystem UserSystem = new UserSystem(new LogicTestDatabse());
-            UserDTO b = new UserDTO() { Name = "User1", Address = "Address1" };
-            b = UserSystem.AddUser(b);
-            Assert.IsNotNull(UserSystem.GetUser(b.ID));
+            var usCol = new ImpUserCollection();
+            var user = usCol.Add(new User { Name = "Name1", Address = "Address1" });
+            usCol.Add(new User { Name = "Name2", Address = "Address2" });
+
+            IUserSystem UserSystem = new UserSystem(usCol);
+
+            Assert.IsNotNull(UserSystem.GetUser(user.ID));
         }
 
         [TestMethod()]
         public void GetUsersTest()
         {
-            IUserSystem UserSystem = new UserSystem(new LogicTestDatabse());
+            var usCol = new ImpUserCollection();
+            usCol.Add(new User { Name = "Name1", Address = "Address1" });
+            usCol.Add(new User { Name = "Name2", Address = "Address2" });
 
-            UserDTO b = new UserDTO() { Name = "User1", Address = "Address1" };
-            UserSystem.AddUser(b);
-
-            b = new UserDTO() { Name = "User2", Address = "Address2" };
-            UserSystem.AddUser(b);
+            IUserSystem UserSystem = new UserSystem(usCol);
 
             Assert.AreEqual(2, UserSystem.GetUsers().Count());
         }

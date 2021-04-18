@@ -19,10 +19,10 @@ namespace Logic.Systems
             OrderCollection = new OrderCollection();
         }
 
-        public BookSystem(IDatabase database)
+        public BookSystem(ILibraryCollection<Book> bC, ILibraryCollection<Order> oC)
         {
-            BookCollection = new BookCollection(database);
-            OrderCollection = new OrderCollection(database);
+            BookCollection = bC;
+            OrderCollection = oC;
         }
 
         public BookDTO AddBook(BookDTO book)

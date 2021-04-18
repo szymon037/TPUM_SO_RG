@@ -16,7 +16,7 @@ namespace Logic.Systems.Tests
         [TestMethod()]
         public void AddBookTest()
         {
-            IBookSystem BookSystem = new BookSystem(new LogicTestDatabse());
+            IBookSystem BookSystem = new BookSystem(new ImpBookColletion(), new ImpOrderColletion());
             BookDTO b = new BookDTO() { Title = "Title1", Author = "Author1"};
             b = BookSystem.AddBook(b);
             Assert.AreEqual(b.Title, BookSystem.GetBook(b.ID).Title);
@@ -25,53 +25,63 @@ namespace Logic.Systems.Tests
         [TestMethod()]
         public void GetBookTest()
         {
-            IBookSystem BookSystem = new BookSystem(new LogicTestDatabse());
-            BookDTO b = new BookDTO() { Title = "Title1", Author = "Author1" };
-            b = BookSystem.AddBook(b);
-            Assert.IsNotNull(BookSystem.GetBook(b.ID));
+            var boCol = new ImpBookColletion();
+            var book = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+
+            IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
+
+            Assert.IsNotNull(BookSystem.GetBook(book.ID));
         }
 
         [TestMethod()]
         public void GetNumberOfBooksTest()
         {
-            IBookSystem BookSystem = new BookSystem(new LogicTestDatabse());
-            BookDTO b = new BookDTO() { Title = "Title1", Author = "Author1" };
-            BookSystem.AddBook(b);
-            Assert.AreEqual(1, BookSystem.GetNumberOfBooks());
+            var boCol = new ImpBookColletion();
+            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+
+            IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
+
+            Assert.AreEqual(2, BookSystem.GetNumberOfBooks());
         }
 
         [TestMethod()]
         public void GetBooksTest()
         {
-            IBookSystem BookSystem = new BookSystem(new LogicTestDatabse());
-            BookDTO b = new BookDTO() { Title = "Title1", Author = "Author1" };
-            BookSystem.AddBook(b);
-            Assert.IsNotNull(BookSystem.GetBooks());
+            var boCol = new ImpBookColletion();
+            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+
+            IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
+
+            Assert.AreEqual(2, BookSystem.GetBooks().Count());
         }
 
         [TestMethod()]
         public void GetBooksByAuthorTest()
         {
-            IBookSystem BookSystem = new BookSystem(new LogicTestDatabse());
-            BookDTO b = new BookDTO() { Title = "Title1", Author = "Author1" };
-            BookSystem.AddBook(b);
-            Assert.IsNotNull(BookSystem.GetBooksByAuthor("Author1"));
+            var boCol = new ImpBookColletion();
+            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            boCol.Add(new Book { Title = "Title3", Author = "Author1" });
+
+            IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
+
+            Assert.AreEqual(2, BookSystem.GetBooksByAuthor("Author1").Count());
         }
 
         [TestMethod()]
         public void GetAvailableBooksTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            BookDTO b2 = new BookDTO() { Title = "Title2", Author = "Author2" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            orCol.Add(new Order { UserID = 1, BookID = book.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            b2 = BookSystem.AddBook(b2);
-            OrderSystem.BorrowBook(b1, u1);
+            IBookSystem BookSystem = new BookSystem(boCol, orCol);
 
             Assert.AreEqual(1, BookSystem.GetAvailableBooks().ToList().Count);
         }

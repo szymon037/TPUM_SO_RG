@@ -13,113 +13,107 @@ namespace Logic.Systems.Tests
     [TestClass()]
     public class OrderSystemTests
     {
-
         [TestMethod()]
         public void GetOrderTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
-            IUserSystem UserSystem = new UserSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            var order = orCol.Add(new Order { UserID = 1, BookID = book.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            u1 = UserSystem.AddUser(u1);
+            IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
-            OrderDTO o = OrderSystem.BorrowBook(b1, u1);
-            Assert.IsNotNull(OrderSystem.GetOrder(o.ID));
+            Assert.IsNotNull(OrderSystem.GetOrder(order.ID));
         }
-
+        
         [TestMethod()]
         public void GetOrdersTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
-            IUserSystem UserSystem = new UserSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            orCol.Add(new Order { UserID = 1, BookID = book.ID, Returned = true });
+            orCol.Add(new Order { UserID = 2, BookID = book.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            u1 = UserSystem.AddUser(u1);
+            IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
-            OrderDTO o = OrderSystem.BorrowBook(b1, u1);
-            Assert.IsNotNull(OrderSystem.GetOrders());
+            Assert.AreEqual(2, OrderSystem.GetOrders().Count());
         }
 
         [TestMethod()]
         public void GetUserOrdersTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
-            IUserSystem UserSystem = new UserSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
+            orCol.Add(new Order { UserID = 1, BookID = book2.ID, Returned = false });
+            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            u1 = UserSystem.AddUser(u1);
+            IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
-            OrderDTO o = OrderSystem.BorrowBook(b1, u1);
-            Assert.IsNotNull(OrderSystem.GetUserOrders(u1.ID));
+            Assert.AreEqual(2, OrderSystem.GetUserOrders(1).Count());
         }
 
         [TestMethod()]
         public void GetUnfinishedOrdersTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
-            IUserSystem UserSystem = new UserSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
+            orCol.Add(new Order { UserID = 1, BookID = book2.ID, Returned = false });
+            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            u1 = UserSystem.AddUser(u1);
+            IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
-            OrderDTO o = OrderSystem.BorrowBook(b1, u1);
-            Assert.AreEqual(1, OrderSystem.GetUnfinishedOrders().ToList().Count);
+            Assert.AreEqual(2, OrderSystem.GetUnfinishedOrders().Count());
         }
-
+        
         [TestMethod()]
         public void ReturnBookTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
-            IUserSystem UserSystem = new UserSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
+            var order = orCol.Add(new Order { UserID = 1, BookID = book2.ID, Returned = false });
+            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            u1 = UserSystem.AddUser(u1);
+            IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
+            var o = OrderSystem.GetOrder(order.ID);
 
-            OrderDTO o = OrderSystem.BorrowBook(b1, u1);
+            Assert.IsFalse(o.Returned);
             Assert.IsNotNull(OrderSystem.ReturnBook(o));
+            Assert.IsTrue(o.Returned);
         }
-
+        
         [TestMethod()]
         public void BorrowBookTest()
         {
-            LogicTestDatabse logicTestDatabse = new LogicTestDatabse();
-            IBookSystem BookSystem = new BookSystem(logicTestDatabse);
-            IOrderSystem OrderSystem = new OrderSystem(logicTestDatabse);
-            IUserSystem UserSystem = new UserSystem(logicTestDatabse);
+            var boCol = new ImpBookColletion();
+            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
+            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
 
-            BookDTO b1 = new BookDTO() { Title = "Title1", Author = "Author1" };
-            UserDTO u1 = new UserDTO() { Name = "User1", Address = "Address1" };
+            var orCol = new ImpOrderColletion();
+            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
+            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
 
-            b1 = BookSystem.AddBook(b1);
-            u1 = UserSystem.AddUser(u1);
+            BookDTO b1 = new BookDTO() { ID = book2.ID, Title = "Title1", Author = "Author1" };
+            UserDTO u1 = new UserDTO() { ID = 1, Name = "User1", Address = "Address1" };
 
-            OrderDTO o = OrderSystem.BorrowBook(b1, u1);
-            Assert.AreEqual(1, OrderSystem.GetOrders().ToList().Count);
+            IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
+            Assert.IsNotNull(OrderSystem.BorrowBook(b1, u1));
         }
     }
 }
