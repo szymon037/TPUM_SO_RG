@@ -9,7 +9,7 @@ namespace Logic
 {
     internal static class Translator
     {
-        internal static UserDTO TranslateUser(User user)
+        internal static UserDTO TranslateUser(IUser user)
         {
             UserDTO result = new UserDTO
             {
@@ -21,7 +21,7 @@ namespace Logic
             return result;
         }
 
-        internal static BookDTO TranslateBook(Book book)
+        internal static BookDTO TranslateBook(IBook book)
         {
             BookDTO result = new BookDTO
             {
@@ -34,7 +34,7 @@ namespace Logic
             return result;
         }
 
-        internal static OrderDTO TranslateOrder(Order order, Book book)
+        internal static OrderDTO TranslateOrder(IOrder order, IBook book)
         {
             OrderDTO result = new OrderDTO
             {

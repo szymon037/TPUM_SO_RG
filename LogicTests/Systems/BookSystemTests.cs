@@ -7,6 +7,7 @@ using System.Text;
 using Logic.DataDTO;
 using LogicTests;
 using Data.Models;
+using Data;
 
 namespace Logic.Systems.Tests
 {
@@ -26,8 +27,8 @@ namespace Logic.Systems.Tests
         public void GetBookTest()
         {
             var boCol = new ImpBookColletion();
-            var book = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            var book = boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
 
@@ -38,8 +39,8 @@ namespace Logic.Systems.Tests
         public void GetNumberOfBooksTest()
         {
             var boCol = new ImpBookColletion();
-            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
 
@@ -50,8 +51,8 @@ namespace Logic.Systems.Tests
         public void GetBooksTest()
         {
             var boCol = new ImpBookColletion();
-            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
 
@@ -62,9 +63,9 @@ namespace Logic.Systems.Tests
         public void GetBooksByAuthorTest()
         {
             var boCol = new ImpBookColletion();
-            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            boCol.Add(new Book { Title = "Title2", Author = "Author2" });
-            boCol.Add(new Book { Title = "Title3", Author = "Author1" });
+            boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
+            boCol.Add(Factory.CreateBook("Title3", "Author1", DateTime.Now));
 
             IBookSystem BookSystem = new BookSystem(boCol, new ImpOrderColletion());
 
@@ -75,12 +76,12 @@ namespace Logic.Systems.Tests
         public void GetAvailableBooksTest()
         {
             var boCol = new ImpBookColletion();
-            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            orCol.Add(new Order { UserID = 1, BookID = book.ID, Returned = false });
-
+            orCol.Add(Factory.CreateOrder(1, book.ID, false));
+            
             IBookSystem BookSystem = new BookSystem(boCol, orCol);
 
             Assert.AreEqual(1, BookSystem.GetAvailableBooks().ToList().Count);

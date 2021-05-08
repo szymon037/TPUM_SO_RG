@@ -15,58 +15,57 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void AddTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
-            BookCollection.Add(new Book { Title = "Book1", Author = "Author1" });
+            ILibraryCollection<IBook> BookCollection = Factory.CreateBookCollection(new DataTestDatabase());
+            BookCollection.Add(Factory.CreateBook("Book1", "Author1", DateTime.Now));
             Assert.IsNotNull(BookCollection.Get((b => b.Title == "Book1")));
         }
 
         [TestMethod()]
         public void DeleteTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
-            Book b = new Book { Title = "Book1", Author = "Author1" };
-            BookCollection.Add(b);
+            ILibraryCollection<IBook> BookCollection = Factory.CreateBookCollection(new DataTestDatabase());
+            IBook b = BookCollection.Add(Factory.CreateBook("Book1", "Author1", DateTime.Now));
             BookCollection.Delete(b.ID);
+
             Assert.AreEqual(0, BookCollection.Get().ToList().Count());
         }
 
         [TestMethod()]
         public void GetTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
-            Book b1 = new Book { Title = "Book1", Author = "Author1" };
-            Book b2 = new Book { Title = "Book2", Author = "Author1" };
-            BookCollection.Add(b1);
-            BookCollection.Add(b2);
+            ILibraryCollection<IBook> BookCollection = Factory.CreateBookCollection(new DataTestDatabase());
+            BookCollection.Add(Factory.CreateBook("Book1", "Author1", DateTime.Now));
+            BookCollection.Add(Factory.CreateBook("Book2", "Author1", DateTime.Now));
+
             Assert.AreEqual(2, BookCollection.Get((b => b.Author == "Author1")).ToList().Count);
         }
 
         [TestMethod()]
         public void GetTest1()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
-            Book b1 = new Book { Title = "Book1", Author = "Author1" };
-            BookCollection.Add(b1);
+            ILibraryCollection<IBook> BookCollection = Factory.CreateBookCollection(new DataTestDatabase());
+            IBook b1 = BookCollection.Add(Factory.CreateBook("Book1", "Author1", DateTime.Now));
+
             Assert.IsNotNull(BookCollection.Get(b1.ID));
         }
 
         [TestMethod()]
         public void GetTest2()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
-            Book b1 = new Book { Title = "Book1", Author = "Author1" };
-            BookCollection.Add(b1);
-            Assert.IsNotNull(BookCollection.Get());
+            ILibraryCollection<IBook> BookCollection = Factory.CreateBookCollection(new DataTestDatabase());
+            BookCollection.Add(Factory.CreateBook("Book1", "Author1", DateTime.Now));
+
+            Assert.AreEqual(1, BookCollection.Get().Count());
         }
 
         [TestMethod()]
         public void UpdateTest()
         {
-            ILibraryCollection<Book> BookCollection = new BookCollection(new DataTestDatabase());
-            Book b1 = new Book { Title = "Book1", Author = "Author1" };
-            Book b2 = new Book { Title = "Book2", Author = "Author1" };
-            BookCollection.Add(b1);
+            ILibraryCollection<IBook> BookCollection = Factory.CreateBookCollection(new DataTestDatabase());
+            IBook b1 = BookCollection.Add(Factory.CreateBook("Book1", "Author1", DateTime.Now));
+            IBook b2 = Factory.CreateBook("Book2", "Author2", DateTime.Now);
             b2.ID = b1.ID;
+
             Assert.AreEqual(b2.Title, BookCollection.Update(b2).Title);
         }
     }

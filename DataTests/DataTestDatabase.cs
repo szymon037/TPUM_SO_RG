@@ -9,15 +9,15 @@ namespace DataTests
 {
     internal class DataTestDatabase : IDatabase
     {
-        public List<User> Users { get; set; }
-        public List<Book> Books { get; set; }
-        public List<Order> Orders { get; set; }
+        public List<IUser> Users { get; set; }
+        public List<IBook> Books { get; set; }
+        public List<IOrder> Orders { get; set; }
 
         public DataTestDatabase()
         {
-            Users = new List<User>();
-            Books = new List<Book>();
-            Orders = new List<Order>();
+            Users = new List<IUser>();
+            Books = new List<IBook>();
+            Orders = new List<IOrder>();
         }
     }
 }

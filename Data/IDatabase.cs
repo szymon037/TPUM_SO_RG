@@ -8,8 +8,8 @@ namespace Data
 {
     public interface IDatabase
     {
-        public List<User> Users { get; set; }
-        public List<Book> Books { get; set; }
-        public List<Order> Orders { get; set; }
+        public List<IUser> Users { get; set; }
+        public List<IBook> Books { get; set; }
+        public List<IOrder> Orders { get; set; }
     }
 }

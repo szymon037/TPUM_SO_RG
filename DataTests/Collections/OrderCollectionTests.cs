@@ -15,57 +15,57 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void AddTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
-            OrderCollection.Add(new Order { UserID = 1, BookID = 1 });
+            ILibraryCollection<IOrder> OrderCollection = Factory.CreateOrderCollection(new DataTestDatabase());
+            OrderCollection.Add(Factory.CreateOrder(1, 1, false));
+
             Assert.IsNotNull(OrderCollection.Get((o => o.UserID == 1)));
         }
 
         [TestMethod()]
         public void DeleteTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
-            Order o = new Order { UserID = 1, BookID = 1 };
-            OrderCollection.Add(o);
+            ILibraryCollection<IOrder> OrderCollection = Factory.CreateOrderCollection(new DataTestDatabase());
+            IOrder o = OrderCollection.Add(Factory.CreateOrder(1, 1, false));
             OrderCollection.Delete(o.ID);
+
             Assert.AreEqual(0, OrderCollection.Get().ToList().Count());
         }
 
         [TestMethod()]
         public void GetTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
-            Order o1 = new Order { UserID = 1, BookID = 1 };
-            Order o2 = new Order { UserID = 1, BookID = 2 };
-            OrderCollection.Add(o1);
-            OrderCollection.Add(o2);
+            ILibraryCollection<IOrder> OrderCollection = Factory.CreateOrderCollection(new DataTestDatabase());
+            IOrder o1 = OrderCollection.Add(Factory.CreateOrder(1, 1, false));
+            IOrder o2 = OrderCollection.Add(Factory.CreateOrder(1, 2, false));
+
             Assert.AreEqual(2, OrderCollection.Get((o => o.UserID == 1)).ToList().Count);
         }
 
         [TestMethod()]
         public void GetTest1()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
-            Order o1 = new Order { UserID = 1, BookID = 1 };
-            OrderCollection.Add(o1);
+            ILibraryCollection<IOrder> OrderCollection = Factory.CreateOrderCollection(new DataTestDatabase());
+            IOrder o1 = OrderCollection.Add(Factory.CreateOrder(1, 1, false));
+
             Assert.IsNotNull(OrderCollection.Get(o1.ID));
         }
 
         [TestMethod()]
         public void GetTest2()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
-            Order b1 = new Order { UserID = 1, BookID = 1 };
-            OrderCollection.Add(b1);
-            Assert.IsNotNull(OrderCollection.Get());
+            ILibraryCollection<IOrder> OrderCollection = Factory.CreateOrderCollection(new DataTestDatabase());
+            OrderCollection.Add(Factory.CreateOrder(1, 1, false));
+
+            Assert.AreEqual(1, OrderCollection.Get().Count());
         }
 
         [TestMethod()]
         public void UpdateTest()
         {
-            ILibraryCollection<Order> OrderCollection = new OrderCollection(new DataTestDatabase());
-            Order o1 = new Order { UserID = 1, BookID = 1 };
-            Order o2 = new Order { UserID = 1, BookID = 2 };
-            OrderCollection.Add(o1);
+            ILibraryCollection<IOrder> OrderCollection = Factory.CreateOrderCollection(new DataTestDatabase());
+            IOrder o1 = OrderCollection.Add(Factory.CreateOrder(1, 1, false));
+            IOrder o2 = OrderCollection.Add(Factory.CreateOrder(1, 2, false));
+
             o2.ID = o1.ID;
             Assert.AreEqual(o2.BookID, OrderCollection.Update(o2).BookID);
         }

@@ -6,7 +6,7 @@ using Data.Models;
 
 namespace Data.Collections
 {
-    public class OrderCollection : ILibraryCollection<Order>
+    internal class OrderCollection : ILibraryCollection<IOrder>
     {
         private IDatabase Database;
 
@@ -20,7 +20,7 @@ namespace Data.Collections
             Database = database;
         }
 
-        public Order Add(Order entity)
+        public IOrder Add(IOrder entity)
         {
             if (Database.Orders.Find(c => c.UserID == entity.UserID && c.BookID == entity.BookID) == null)
             {
@@ -33,39 +33,39 @@ namespace Data.Collections
 
         public void Delete(int id)
         {
-            Order order = Database.Orders.Find(c => c.ID == id);
+            IOrder IOrder = Database.Orders.Find(c => c.ID == id);
 
-            if (order != null)
-                Database.Orders.Remove(order);
+            if (IOrder != null)
+                Database.Orders.Remove(IOrder);
         }
 
-        public IEnumerable<Order> Get(Predicate<Order> pred)
+        public IEnumerable<IOrder> Get(Predicate<IOrder> pred)
         {
             return Database.Orders.FindAll(pred);
         }
 
-        public Order Get(int id)
+        public IOrder Get(int id)
         {
             return Database.Orders.Find(c => c.ID == id);
         }
 
-        public IEnumerable<Order> Get()
+        public IEnumerable<IOrder> Get()
         {
             return Database.Orders;
         }
 
-        public Order Update(Order entity)
+        public IOrder Update(IOrder entity)
         {
-            Order order = Database.Orders.Find(c => c.ID == entity.ID);
+            IOrder IOrder = Database.Orders.Find(c => c.ID == entity.ID);
 
-            if (order != null)
+            if (IOrder != null)
             {
-                order.BookID = entity.BookID;
-                order.UserID = entity.UserID;
-                order.Start = entity.Start;
+                IOrder.BookID = entity.BookID;
+                IOrder.UserID = entity.UserID;
+                IOrder.Start = entity.Start;
             }
 
-            return order;
+            return IOrder;
         }
     }
 }

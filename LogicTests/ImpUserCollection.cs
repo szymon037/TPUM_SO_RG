@@ -7,16 +7,16 @@ using Data.Models;
 
 namespace LogicTests
 {
-    class ImpUserCollection : ILibraryCollection<User>
+    class ImpUserCollection : ILibraryCollection<IUser>
     {
-        List<User> users;
+        List<IUser> users;
 
         public ImpUserCollection()
         {
-            users = new List<User>();
+            users = new List<IUser>();
         }
 
-        public User Add(User entity)
+        public IUser Add(IUser entity)
         {
             users.Add(entity);
             return entity;
@@ -26,22 +26,22 @@ namespace LogicTests
         {
         }
 
-        public IEnumerable<User> Get()
+        public IEnumerable<IUser> Get()
         {
             return users;
         }
 
-        public IEnumerable<User> Get(Predicate<User> pred)
+        public IEnumerable<IUser> Get(Predicate<IUser> pred)
         {
             return null;
         }
 
-        public User Get(int id)
+        public IUser Get(int id)
         {
             return users.Find(c => c.ID == id);
         }
 
-        public User Update(User entity)
+        public IUser Update(IUser entity)
         {
             var us = Get(entity.ID);
             us.Name = entity.Name;

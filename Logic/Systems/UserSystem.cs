@@ -11,25 +11,21 @@ namespace Logic.Systems
 {
     public class UserSystem : IUserSystem
     {
-        private ILibraryCollection<User> UserCollection;
+        private ILibraryCollection<IUser> UserCollection;
 
         public UserSystem()
         {
-            UserCollection = new UserCollection();
+            UserCollection = Factory.CreateUserCollection();
         }
 
-        public UserSystem(ILibraryCollection<User> uC)
+        public UserSystem(ILibraryCollection<IUser> uC)
         {
             UserCollection = uC;
         }
 
         public UserDTO AddUser(UserDTO user)
         {
-            User newUser = new User
-            {
-                Name = user.Name,
-                Address = user.Address
-            };
+            IUser newUser = Factory.CreateUser(user.Name, user.Address);
 
             var res = UserCollection.Add(newUser);
             if (res is null) return null;
@@ -43,7 +39,7 @@ namespace Logic.Systems
 
         public IEnumerable<UserDTO> GetUsers()
         {
-            IEnumerable<User> users = UserCollection.Get();
+            IEnumerable<IUser> users = UserCollection.Get();
 
             return users.Select(c => Translator.TranslateUser(c)).ToList();
         }

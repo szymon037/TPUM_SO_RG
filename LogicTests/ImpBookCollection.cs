@@ -7,16 +7,16 @@ using Data.Models;
 
 namespace LogicTests
 {
-    class ImpBookColletion : ILibraryCollection<Book>
+    class ImpBookColletion : ILibraryCollection<IBook>
     {
-        List<Book> books;
+        List<IBook> books;
 
         public ImpBookColletion()
         {
-            books = new List<Book>();
+            books = new List<IBook>();
         }
 
-        public Book Add(Book entity)
+        public IBook Add(IBook entity)
         {
             books.Add(entity);
             return entity;
@@ -26,22 +26,22 @@ namespace LogicTests
         {
         }
 
-        public IEnumerable<Book> Get()
+        public IEnumerable<IBook> Get()
         {
             return books;
         }
 
-        public IEnumerable<Book> Get(Predicate<Book> pred)
+        public IEnumerable<IBook> Get(Predicate<IBook> pred)
         {
             return null;
         }
 
-        public Book Get(int id)
+        public IBook Get(int id)
         {
             return books.Find(c => c.ID == id);
         }
 
-        public Book Update(Book entity)
+        public IBook Update(IBook entity)
         {
             var bo = Get(entity.ID);
             bo.Title = entity.Title;

@@ -15,58 +15,58 @@ namespace Data.Collections.Tests
         [TestMethod()]
         public void AddTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
-            UserCollection.Add(new User { Name = "User1", Address = "User1Address" });
+            ILibraryCollection<IUser> UserCollection = Factory.CreateUserCollection(new DataTestDatabase());
+            UserCollection.Add(Factory.CreateUser("User1", "User1Address"));
+
             Assert.IsNotNull(UserCollection.Get((u => u.Name == "User1")));
         }
 
         [TestMethod()]
         public void DeleteTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
-            User u = new User { Name = "User1", Address = "User1Address" };
-            UserCollection.Add(u);
+            ILibraryCollection<IUser> UserCollection = Factory.CreateUserCollection(new DataTestDatabase());
+            IUser u = UserCollection.Add(Factory.CreateUser("User1", "User1Address"));
             UserCollection.Delete(u.ID);
+
             Assert.AreEqual(0, UserCollection.Get().ToList().Count());
         }
 
         [TestMethod()]
         public void GetTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
-            User u1 = new User { Name = "User1", Address = "User1Address" };
-            User u2 = new User { Name = "User2", Address = "User2Address" };
-            UserCollection.Add(u1);
-            UserCollection.Add(u2);
+            ILibraryCollection<IUser> UserCollection = Factory.CreateUserCollection(new DataTestDatabase());
+            UserCollection.Add(Factory.CreateUser("User1", "User1Address"));
+            UserCollection.Add(Factory.CreateUser("User2", "User2Address"));
+
             Assert.AreEqual(1, UserCollection.Get((u => u.Name == "User2")).ToList().Count);
         }
 
         [TestMethod()]
         public void GetTest1()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
-            User u1 = new User { Name = "User1", Address = "User1Address" };
-            UserCollection.Add(u1);
-            Assert.IsNotNull(UserCollection.Get(u1.ID));
+            ILibraryCollection<IUser> UserCollection = Factory.CreateUserCollection(new DataTestDatabase());
+            IUser u = UserCollection.Add(Factory.CreateUser("User1", "User1Address"));
+
+            Assert.IsNotNull(UserCollection.Get(u.ID));
         }
 
         [TestMethod()]
         public void GetTest2()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
-            User u1 = new User { Name = "User1", Address = "User1Address" };
-            UserCollection.Add(u1);
-            Assert.IsNotNull(UserCollection.Get());
+            ILibraryCollection<IUser> UserCollection = Factory.CreateUserCollection(new DataTestDatabase());
+            UserCollection.Add(Factory.CreateUser("User1", "User1Address"));
+
+            Assert.AreEqual(1, UserCollection.Get().Count());
         }
 
         [TestMethod()]
         public void UpdateTest()
         {
-            ILibraryCollection<User> UserCollection = new UserCollection(new DataTestDatabase());
-            User u1 = new User { Name = "User1", Address = "User1Address" };
-            User u2 = new User { Name = "User1", Address = "User2Address" };
-            UserCollection.Add(u1);
+            ILibraryCollection<IUser> UserCollection = Factory.CreateUserCollection(new DataTestDatabase());
+            IUser u1 = UserCollection.Add(Factory.CreateUser("User1", "User1Address"));
+            IUser u2 = UserCollection.Add(Factory.CreateUser("User2", "User2Address"));
             u2.ID = u1.ID;
+
             Assert.AreEqual(u2.Address, UserCollection.Update(u2).Address);
         }
     }

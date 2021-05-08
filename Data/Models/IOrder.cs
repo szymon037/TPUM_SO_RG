@@ -4,19 +4,8 @@ using System.Text;
 
 namespace Data.Models
 {
-    internal class Order : IOrder
+    public interface IOrder
     {
-        private static int Counter = 1;
-        private static object Lock = new object();
-
-        public Order()
-        {
-            lock (Lock)
-            {
-                ID = Counter++;
-            }
-        }
-
         public int ID { get; set; }
         public int UserID { get; set; }
         public int BookID { get; set; }

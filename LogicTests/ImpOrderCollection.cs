@@ -7,16 +7,16 @@ using Data.Models;
 
 namespace LogicTests
 {
-    class ImpOrderColletion : ILibraryCollection<Order>
+    class ImpOrderColletion : ILibraryCollection<IOrder>
     {
-        List<Order> orders;
+        List<IOrder> orders;
 
         public ImpOrderColletion()
         {
-            orders = new List<Order>();
+            orders = new List<IOrder>();
         }
 
-        public Order Add(Order entity)
+        public IOrder Add(IOrder entity)
         {
             orders.Add(entity);
             return entity;
@@ -26,22 +26,22 @@ namespace LogicTests
         {
         }
 
-        public IEnumerable<Order> Get()
+        public IEnumerable<IOrder> Get()
         {
             return orders;
         }
 
-        public IEnumerable<Order> Get(Predicate<Order> pred)
+        public IEnumerable<IOrder> Get(Predicate<IOrder> pred)
         {
             return null;
         }
 
-        public Order Get(int id)
+        public IOrder Get(int id)
         {
             return orders.Find(c => c.ID == id);
         }
 
-        public Order Update(Order entity)
+        public IOrder Update(IOrder entity)
         {
             var or = Get(entity.ID);
             or.UserID = entity.UserID;

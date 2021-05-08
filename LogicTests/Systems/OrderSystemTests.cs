@@ -4,8 +4,11 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+
 using Logic.DataDTO;
 using LogicTests;
+
+using Data;
 using Data.Models;
 
 namespace Logic.Systems.Tests
@@ -17,11 +20,11 @@ namespace Logic.Systems.Tests
         public void GetOrderTest()
         {
             var boCol = new ImpBookColletion();
-            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            var order = orCol.Add(new Order { UserID = 1, BookID = book.ID, Returned = false });
+            var order = orCol.Add(Factory.CreateOrder(1, book.ID, false));
 
             IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
@@ -32,12 +35,12 @@ namespace Logic.Systems.Tests
         public void GetOrdersTest()
         {
             var boCol = new ImpBookColletion();
-            boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            orCol.Add(new Order { UserID = 1, BookID = book.ID, Returned = true });
-            orCol.Add(new Order { UserID = 2, BookID = book.ID, Returned = false });
+            orCol.Add(Factory.CreateOrder(1, book.ID, true));
+            orCol.Add(Factory.CreateOrder(2, book.ID, false));
 
             IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
@@ -48,13 +51,13 @@ namespace Logic.Systems.Tests
         public void GetUserOrdersTest()
         {
             var boCol = new ImpBookColletion();
-            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            var book1 = boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book2 = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
-            orCol.Add(new Order { UserID = 1, BookID = book2.ID, Returned = false });
-            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
+            orCol.Add(Factory.CreateOrder(1, book1.ID, true));
+            orCol.Add(Factory.CreateOrder(1, book2.ID, false));
+            orCol.Add(Factory.CreateOrder(2, book1.ID, false));
 
             IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
@@ -65,13 +68,13 @@ namespace Logic.Systems.Tests
         public void GetUnfinishedOrdersTest()
         {
             var boCol = new ImpBookColletion();
-            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            var book1 = boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book2 = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
-            orCol.Add(new Order { UserID = 1, BookID = book2.ID, Returned = false });
-            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
+            orCol.Add(Factory.CreateOrder(1, book1.ID, true));
+            orCol.Add(Factory.CreateOrder(1, book2.ID, false));
+            orCol.Add(Factory.CreateOrder(2, book1.ID, false));
 
             IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
 
@@ -82,13 +85,13 @@ namespace Logic.Systems.Tests
         public void ReturnBookTest()
         {
             var boCol = new ImpBookColletion();
-            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            var book1 = boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book2 = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
-            var order = orCol.Add(new Order { UserID = 1, BookID = book2.ID, Returned = false });
-            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
+            orCol.Add(Factory.CreateOrder(1, book1.ID, true));
+            IOrder order = orCol.Add(Factory.CreateOrder(1, book2.ID, false));
+            orCol.Add(Factory.CreateOrder(2, book1.ID, false));
 
             IOrderSystem OrderSystem = new OrderSystem(boCol, orCol);
             var o = OrderSystem.GetOrder(order.ID);
@@ -102,12 +105,12 @@ namespace Logic.Systems.Tests
         public void BorrowBookTest()
         {
             var boCol = new ImpBookColletion();
-            var book1 = boCol.Add(new Book { Title = "Title1", Author = "Author1" });
-            var book2 = boCol.Add(new Book { Title = "Title2", Author = "Author2" });
+            var book1 = boCol.Add(Factory.CreateBook("Title1", "Author1", DateTime.Now));
+            var book2 = boCol.Add(Factory.CreateBook("Title2", "Author2", DateTime.Now));
 
             var orCol = new ImpOrderColletion();
-            orCol.Add(new Order { UserID = 1, BookID = book1.ID, Returned = true });
-            orCol.Add(new Order { UserID = 2, BookID = book1.ID, Returned = false });
+            orCol.Add(Factory.CreateOrder(1, book1.ID, true));
+            orCol.Add(Factory.CreateOrder(2, book1.ID, false));
 
             BookDTO b1 = new BookDTO() { ID = book2.ID, Title = "Title1", Author = "Author1" };
             UserDTO u1 = new UserDTO() { ID = 1, Name = "User1", Address = "Address1" };

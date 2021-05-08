@@ -6,7 +6,7 @@ using Data.Models;
 
 namespace Data.Collections
 {
-    public class BookCollection : ILibraryCollection<Book>
+    internal class BookCollection : ILibraryCollection<IBook>
     {
         private IDatabase Database;
 
@@ -20,7 +20,7 @@ namespace Data.Collections
             Database = database;
         }
 
-        public Book Add(Book entity)
+        public IBook Add(IBook entity)
         {
             if (Database.Books.Find(c => c.Title.Equals(entity.Title)) == null)
             {
@@ -33,30 +33,30 @@ namespace Data.Collections
 
         public void Delete(int id)
         {
-            Book book = Database.Books.Find(c => c.ID == id);
+            IBook book = Database.Books.Find(c => c.ID == id);
 
             if (book != null)
                 Database.Books.Remove(book);
         }
 
-        public IEnumerable<Book> Get(Predicate<Book> pred)
+        public IEnumerable<IBook> Get(Predicate<IBook> pred)
         {
             return Database.Books.FindAll(pred);
         }
 
-        public Book Get(int id)
+        public IBook Get(int id)
         {
             return Database.Books.Find(c => c.ID == id);
         }
 
-        public IEnumerable<Book> Get()
+        public IEnumerable<IBook> Get()
         {
             return Database.Books;
         }
 
-        public Book Update(Book entity)
+        public IBook Update(IBook entity)
         {
-            Book book = Database.Books.Find(c => c.ID == entity.ID);
+            IBook book = Database.Books.Find(c => c.ID == entity.ID);
 
             if (book != null)
             {

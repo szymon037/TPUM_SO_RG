@@ -6,7 +6,7 @@ using Data.Models;
 
 namespace Data.Collections
 {
-    public class UserCollection : ILibraryCollection<User>
+    internal class UserCollection : ILibraryCollection<IUser>
     {
         private IDatabase Database;
 
@@ -20,7 +20,7 @@ namespace Data.Collections
             Database = database;
         }
 
-        public User Add(User entity)
+        public IUser Add(IUser entity)
         {
             if (Database.Users.Find(c => c.Name.Equals(entity.Name)) == null)
             {
@@ -33,38 +33,38 @@ namespace Data.Collections
 
         public void Delete(int id)
         {
-            User user = Database.Users.Find(c => c.ID == id);
+            IUser user = Database.Users.Find(c => c.ID == id);
 
             if (user != null)
                 Database.Users.Remove(user);
         }
 
-        public IEnumerable<User> Get(Predicate<User> pred)
+        public IEnumerable<IUser> Get(Predicate<IUser> pred)
         {
             return Database.Users.FindAll(pred);
         }
 
-        public User Get(int id)
+        public IUser Get(int id)
         {
             return Database.Users.Find(c => c.ID == id);
         }
 
-        public IEnumerable<User> Get()
+        public IEnumerable<IUser> Get()
         {
             return Database.Users;
         }
 
-        public User Update(User entity)
+        public IUser Update(IUser entity)
         {
-            User user = Database.Users.Find(c => c.ID == entity.ID);
+            IUser IUser = Database.Users.Find(c => c.ID == entity.ID);
 
-            if (user != null)
+            if (IUser != null)
             {
-                user.Name = entity.Name;
-                user.Address = entity.Address;
+                IUser.Name = entity.Name;
+                IUser.Address = entity.Address;
             }
 
-            return user;
+            return IUser;
         }
     }
 }

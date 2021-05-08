@@ -49,7 +49,7 @@ namespace ViewModel
 
         public void AddBook(string bookTitle)
         {
-            if (bookTitle == null)
+            if (bookTitle == null || bookTitle.Length == 0)
                 return;
 
             var res = BookSystem.AddBook(new BookDTO { Title = bookTitle, Author = "" });

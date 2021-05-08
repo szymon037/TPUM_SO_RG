@@ -4,7 +4,7 @@ using System.Linq;
 
 using Logic.DataDTO;
 using LogicTests;
-using Data.Models;
+using Data;
 
 namespace Logic.Systems.Tests
 {
@@ -29,8 +29,9 @@ namespace Logic.Systems.Tests
         public void GetUserTest()
         {
             var usCol = new ImpUserCollection();
-            var user = usCol.Add(new User { Name = "Name1", Address = "Address1" });
-            usCol.Add(new User { Name = "Name2", Address = "Address2" });
+            var user = usCol.Add(Factory.CreateUser("Name1", "Address1"));
+            
+            usCol.Add(Factory.CreateUser("Name2", "Address2"));
 
             IUserSystem UserSystem = new UserSystem(usCol);
 
@@ -41,8 +42,8 @@ namespace Logic.Systems.Tests
         public void GetUsersTest()
         {
             var usCol = new ImpUserCollection();
-            usCol.Add(new User { Name = "Name1", Address = "Address1" });
-            usCol.Add(new User { Name = "Name2", Address = "Address2" });
+            usCol.Add(Factory.CreateUser("Name1", "Address1"));
+            usCol.Add(Factory.CreateUser("Name2", "Address2"));
 
             IUserSystem UserSystem = new UserSystem(usCol);
 

@@ -11,16 +11,16 @@ namespace Logic.Systems
 {
     public class OrderSystem : IOrderSystem
     {
-        private ILibraryCollection<Order> OrderCollection;
-        private ILibraryCollection<Book> BookCollection;
+        private ILibraryCollection<IBook> BookCollection;
+        private ILibraryCollection<IOrder> OrderCollection;
 
         public OrderSystem()
         {
-            OrderCollection = new OrderCollection();
-            BookCollection = new BookCollection();
+            BookCollection = Factory.CreateBookCollection();
+            OrderCollection = Factory.CreateOrderCollection();
         }
 
-        public OrderSystem(ILibraryCollection<Book> bC, ILibraryCollection<Order> oC)
+        public OrderSystem(ILibraryCollection<IBook> bC, ILibraryCollection<IOrder> oC)
         {
             BookCollection = bC;
             OrderCollection = oC;
@@ -28,27 +28,27 @@ namespace Logic.Systems
 
         public OrderDTO GetOrder(int id)
         {
-            Order order = OrderCollection.Get(id);
+            IOrder order = OrderCollection.Get(id);
             return Translator.TranslateOrder(order, BookCollection.Get(order.BookID));
         }
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            IEnumerable<Order> orders = OrderCollection.Get();
+            IEnumerable<IOrder> orders = OrderCollection.Get();
 
             return orders.Select(c => Translator.TranslateOrder(c, BookCollection.Get(c.BookID))).ToList();
         }
 
         public IEnumerable<OrderDTO> GetUserOrders(int userID)
         {
-            IEnumerable<Order> orders = OrderCollection.Get();
+            IEnumerable<IOrder> orders = OrderCollection.Get();
 
             return orders.Where(c => c.UserID == userID).Select(c => Translator.TranslateOrder(c, BookCollection.Get(c.BookID))).ToList();
         }
 
         public IEnumerable<OrderDTO> GetUnfinishedOrders()
         {
-            IEnumerable<Order> orders = OrderCollection.Get();
+            IEnumerable<IOrder> orders = OrderCollection.Get();
 
             return orders.Where(c => c.Returned == false).Select(c => Translator.TranslateOrder(c, BookCollection.Get(c.BookID))).ToList();
         }
@@ -64,13 +64,7 @@ namespace Logic.Systems
 
         public OrderDTO BorrowBook(BookDTO book, UserDTO user)
         {
-            Order newOrder = new Order
-            {
-                BookID = book.ID,
-                UserID = user.ID,
-                Start = DateTime.Now,
-                Returned = false
-            };
+            IOrder newOrder = Factory.CreateOrder(book.ID, user.ID, false);
 
             var res = OrderCollection.Add(newOrder);
             if (res is null) return null;

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Data
 {
-    public class MockedDatabase : IDatabase
+    internal class MockedDatabase : IDatabase
     {
-        public List<User> Users { get; set; }
-        public List<Book> Books { get; set; }
-        public List<Order> Orders { get; set; }
+        public List<IUser> Users { get; set; }
+        public List<IBook> Books { get; set; }
+        public List<IOrder> Orders { get; set; }
 
         private static MockedDatabase _Instance = null;
         private static readonly object LockObject = new object();
@@ -29,9 +29,9 @@ namespace Data
 
         MockedDatabase()
         {
-            Books = new List<Book>();
-            Users = new List<User>();
-            Orders = new List<Order>();
+            Books = new List<IBook>();
+            Users = new List<IUser>();
+            Orders = new List<IOrder>();
 
             Books.Add(new Book { Title = "Book1", Author = "Author1" });
             Books.Add(new Book { Title = "Book2", Author = "Author2" });

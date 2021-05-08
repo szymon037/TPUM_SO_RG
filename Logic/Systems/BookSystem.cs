@@ -10,16 +10,16 @@ namespace Logic.Systems
 {
     public class BookSystem : IBookSystem
     {
-        private ILibraryCollection<Book> BookCollection;
-        private ILibraryCollection<Order> OrderCollection;
+        private ILibraryCollection<IBook> BookCollection;
+        private ILibraryCollection<IOrder> OrderCollection;
 
         public BookSystem()
         {
-            BookCollection = new BookCollection();
-            OrderCollection = new OrderCollection();
+            BookCollection = Factory.CreateBookCollection();
+            OrderCollection = Factory.CreateOrderCollection();
         }
 
-        public BookSystem(ILibraryCollection<Book> bC, ILibraryCollection<Order> oC)
+        public BookSystem(ILibraryCollection<IBook> bC, ILibraryCollection<IOrder> oC)
         {
             BookCollection = bC;
             OrderCollection = oC;
@@ -27,12 +27,7 @@ namespace Logic.Systems
 
         public BookDTO AddBook(BookDTO book)
         {
-            Book newBook = new Book
-            {
-                Title = book.Title,
-                Author = book.Author,
-                Date = book.Date
-            };
+            IBook newBook = Factory.CreateBook(book.Title, book.Author, book.Date);
 
             var res = BookCollection.Add(newBook);
             if (res is null) return null;
@@ -51,14 +46,14 @@ namespace Logic.Systems
 
         public IEnumerable<BookDTO> GetBooks()
         {
-            IEnumerable<Book> books = BookCollection.Get();
+            IEnumerable<IBook> books = BookCollection.Get();
 
             return books.Select(c => Translator.TranslateBook(c)).ToList();
         }
 
         public IEnumerable<BookDTO> GetBooksByAuthor(string author)
         {
-            IEnumerable<Book> books = BookCollection.Get();
+            IEnumerable<IBook> books = BookCollection.Get();
 
             return books.Where(c => c.Author == author).Select(c => Translator.TranslateBook(c)).ToList();
         }
