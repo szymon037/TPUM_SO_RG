@@ -18,6 +18,7 @@ namespace ViewModel
             UserSystem = new UserSystem();
             BookSystem = new BookSystem();
             OrderSystem = new OrderSystem();
+            _ConnectionSystem = new ConnectionSystem(_UriPeer);
 
             Users = new ObservableCollection<UserDTO>(UserSystem.GetUsers());
             Books = new ObservableCollection<BookDTO>(BookSystem.GetAvailableBooks());
@@ -35,6 +36,7 @@ namespace ViewModel
             _TickObservable = Observable.FromEventPattern<ReactiveEvent>(_ReactiveTimer, "Tick");
             _Observer = _TickObservable.Subscribe(x => ReactiveMessageShow = true);
             _ReactiveTimer.Start();
+            SetConnection();
         }
 
         public void AddUser(string userName)
@@ -168,6 +170,14 @@ namespace ViewModel
             }
         }
 
+        public async void SetConnection()
+        {
+            await _ConnectionSystem.CreateConnection();
+
+            //_ReactiveMessenger = new ReactiveMessenger(_ConnectionSystem);
+            //_ViewObserver = _ReactiveMessenger.Subscribe(x => UpdateProducts());
+        }
+
         public AddUserCommand AddUserCommand { get; private set; }
         public AddBookCommand AddBookCommand { get; private set; }
         public ClosePopupCommand ClosePopupCommand { get; private set; }
@@ -177,6 +187,7 @@ namespace ViewModel
         private IUserSystem UserSystem;
         private IOrderSystem OrderSystem;
         private IBookSystem BookSystem;
+        private ConnectionSystem _ConnectionSystem;
 
         private ObservableCollection<UserDTO> _Users;
         private ObservableCollection<BookDTO> _Books;
@@ -192,5 +203,7 @@ namespace ViewModel
 
         private bool _ReactiveMessageShow;
         private string _MessageContent;
+
+        private string _UriPeer = "ws://localhost:8081/";
     }
 }
