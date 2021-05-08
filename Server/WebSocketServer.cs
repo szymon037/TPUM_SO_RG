@@ -9,17 +9,11 @@ namespace TPUM.ServerPresentation
 {
     public static class WebSocketServer
     {
-        #region API
-
         public static async Task Server(int p2p_port, Action<WebSocketConnection> onConnection)
         {
             Uri _uri = new Uri($@"http://localhost:{p2p_port}/");
             await ServerLoop(_uri, onConnection);
         }
-
-        #endregion API
-
-        #region private
 
         private static async Task ServerLoop(Uri _uri, Action<WebSocketConnection> onConnection)
         {
@@ -49,8 +43,6 @@ namespace TPUM.ServerPresentation
                 Task.Factory.StartNew(() => ServerMessageLoop(webSocket));
             }
 
-            #region WebSocketConnection
-
             protected override Task SendTask(string message)
             {
                 return m_WebSocket.SendAsync(message.GetArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None);
@@ -61,16 +53,10 @@ namespace TPUM.ServerPresentation
                 return m_WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Shutdown procedure started", CancellationToken.None);
             }
 
-            #endregion WebSocketConnection
-
-            #region Object
-
             public override string ToString()
             {
                 return m_remoteEndPoint.ToString();
             }
-
-            #endregion Object
 
             private WebSocket m_WebSocket = null;
             private IPEndPoint m_remoteEndPoint;
@@ -113,7 +99,5 @@ namespace TPUM.ServerPresentation
                 }
             }
         }
-
-        #endregion private
     }
 }
